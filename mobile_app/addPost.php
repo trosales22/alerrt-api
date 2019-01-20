@@ -23,7 +23,7 @@ function addPost(){
 	$topicLocationName = $_POST['topicLocationName'];
 	$topicLocationAddress = $_POST['topicLocationAddress'];
 	$topicAgencyID = $_POST['topicAgencyID'];
-	$topicStatus = 'Reported';
+	$topicStatus = 'Pending';
 	$topicPostedBy = $_POST['topicPostedBy'];
 	$topicDateAndTimePosted = $_POST['topicDateAndTimePosted'];
 

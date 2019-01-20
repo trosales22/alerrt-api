@@ -137,12 +137,18 @@ $row=mysqli_fetch_array($result);
               <p>Newsfeed</p>
             </a>
           </li>
-          <li class="nav-item active">
-            <a class="nav-link" href="agency.php">
-              <i class="material-icons">account_balance</i>
-              <p>Agency</p>
-            </a>
-          </li>
+          
+          <?php
+            if($session_role == "ADMIN"){
+              echo '<li class="nav-item ">' .
+                '<a class="nav-link" href="agency.php">' .
+                  '<i class="material-icons">account_balance</i>' .
+                  '<p>Agency</p>' .
+                '</a>' .
+              '</li>';
+            }
+          ?>
+
           <li class="nav-item ">
             <a class="nav-link" href="#">
               <i class="material-icons">assessment</i>
@@ -164,7 +170,13 @@ $row=mysqli_fetch_array($result);
         <div class="container-fluid">
           <div class="navbar-wrapper">
             <a class="navbar-brand" href="#pablo">Registered Agencies</a>&nbsp;&nbsp;&nbsp;
-            <button type="button" class="btn btn-warning pull-right" data-toggle="modal" data-target="#btnAddAgency"> <i class="material-icons">create</i> Add Agency</button>
+
+            <?php
+              if($session_role == "ADMIN"){
+                echo '<button type="button" class="btn btn-warning pull-right" data-toggle="modal" data-target="#btnAddAgency"> <i class="material-icons">create</i> Add Agency</button>';
+              }
+            ?>
+
           </div>
         </div>
       </nav>

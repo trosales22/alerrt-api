@@ -75,7 +75,7 @@
 						$email = mysqli_real_escape_string($con, $_POST['email']);
 						$password = mysqli_real_escape_string($con, $_POST['pass']);
 						
-						$query 		= mysqli_query($con, "SELECT * FROM tblusers WHERE Email='$email' AND Password='$password' AND UserRole='ADMIN'");
+						$query 		= mysqli_query($con, "SELECT * FROM tblusers WHERE Email='$email' AND Password='$password' AND UserRole != 'USER'");
 						$row		= mysqli_fetch_array($query);
 						$num_row 	= mysqli_num_rows($query);
 						
@@ -85,6 +85,11 @@
 							$_SESSION['user_email']=$row['Email'];
 							$_SESSION['user_role']=$row['UserRole'];
 							$_SESSION['user_profile_pic']=$row['ProfilePicture'];
+
+							if($row['Agency'] != "" || $row['Agency'] != null){
+								$_SESSION['user_agency']=$row['Agency'];
+							}
+
 							header('location:../homepage/dashboard.php');
 						}else{
 							echo 'Invalid username and password. Please try again.';

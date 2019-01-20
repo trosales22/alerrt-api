@@ -12,4 +12,10 @@ $session_email = $_SESSION['user_email'];
 $session_role = $_SESSION['user_role'];
 $session_profile_pic = $_SESSION['user_profile_pic'];
 
+if($_SESSION['user_agency'] != '' || $_SESSION['user_agency'] != 'undefined'){
+	$session_agency = $_SESSION['user_agency'];
+}else{
+	$session_agency = '';
+}
+
 ?>

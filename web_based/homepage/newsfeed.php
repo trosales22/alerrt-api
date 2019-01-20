@@ -69,12 +69,18 @@ $row=mysqli_fetch_array($result);
               <p>Newsfeed</p>
             </a>
           </li>
-          <li class="nav-item ">
-            <a class="nav-link" href="agency.php">
-              <i class="material-icons">account_balance</i>
-              <p>Agency</p>
-            </a>
-          </li>
+
+          <?php
+            if($session_role == "ADMIN"){
+              echo '<li class="nav-item ">' .
+                '<a class="nav-link" href="agency.php">' .
+                  '<i class="material-icons">account_balance</i>' .
+                  '<p>Agency</p>' .
+                '</a>' .
+              '</li>';
+            }
+          ?>
+
           <li class="nav-item ">
             <a class="nav-link" href="#">
               <i class="material-icons">assessment</i>
