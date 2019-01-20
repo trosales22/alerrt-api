@@ -1,5 +1,6 @@
 <?php
 require 'database.php';
+date_default_timezone_set("Asia/Manila");
 changeStatusOfReport();
 
 function changeStatusOfReport(){
