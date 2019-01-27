@@ -15,7 +15,7 @@ $row=mysqli_fetch_array($result);
   <link rel="icon" type="image/png" href="assets/img/logo.png">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
   <title>
-    Newsfeed | ALERRT
+    Users | ALERRT
   </title>
   <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
   <!--     Fonts and icons     -->
@@ -29,6 +29,86 @@ $row=mysqli_fetch_array($result);
 
 <body class="">
   <div class="wrapper ">
+  	<div class="modal fade" id="btnAddAdminUser" role="dialog">
+	    <div class="modal-dialog modal-lg">
+	    
+	      <!-- Modal content-->
+	      <div class="modal-content">
+	      	<form method="POST" action="../addAdminUser.php">
+		        <div class="modal-body">
+			        <h4><strong>Add Admin User</strong></h4><hr width="100%">
+			          
+	                <div class="row">
+	                  <div class="col-md-12">
+	                    <div class="form-group">
+	                      <label class="bmd-label-floating">Fullname</label>
+	                      <input type="text" class="form-control" name="user_fullname" required maxlength="50">
+	                    </div>
+	                  </div>
+
+	                  <div class="col-md-12">
+	                    <div class="form-group">
+	                      <label class="bmd-label-floating">Email Address</label>
+	                      <input type="email" class="form-control" name="user_email" required maxlength="50">
+	                    </div>
+	                  </div>
+
+	                  <div class="col-md-12">
+	                    <div class="form-group">
+	                      <label class="bmd-label-floating">Contact Number</label>
+	                      <input type="text" class="form-control" name="user_contact_number" required>
+	                    </div>
+	                  </div>
+
+	                  <div class="col-md-12">
+	                    <div class="form-group">
+	                      <label class="bmd-label-floating">Password</label>
+	                      <input type="password" class="form-control" name="user_password" required maxlength="50">
+	                    </div>
+	                  </div>
+
+	                  <div class="col-md-12">
+	                    <div class="form-group">
+	                      <label class="bmd-label-floating">Address</label>
+	                      <input type="text" class="form-control" name="user_address" required maxlength="100">
+	                    </div>
+	                  </div>
+
+	                  <div class="col-md-12">
+	                    <div class="form-group">
+	                      <select class="form-control" name="agency_id" required>
+	                      	<option disabled selected>----CHOOSE AGENCY----</option>
+	                      	<?php
+	                      		$query="SELECT * FROM tblagency ORDER BY AgencyCaption ASC";
+	                      		$result = mysqli_query($con,$query);
+
+								$numrows=mysqli_num_rows($result);
+
+								if($numrows > 0){
+									while($row = mysqli_fetch_assoc($result)){
+										echo '<option value="' . $row['AgencyID'] . '">' . $row['AgencyCaption'] . '</option>';
+									}
+								}
+	                      	?>
+	                      </select>
+	                    </div>
+	                  </div>
+	                </div>
+	   
+	                <div class="clearfix"></div>
+	              
+		        </div>
+		        <div class="modal-footer">
+		        	<button type="submit" class="btn btn-warning pull-right">Add User</button>
+		         	<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		        </div>
+
+	        </form>
+	      </div>
+	      
+	    </div>
+  	</div>
+
     <div class="sidebar" data-color="orange" data-background-color="white" data-image="assets/img/sidebar-1.jpg">
       <!--
         Tip 1: You can change the color of the sidebar using: data-color="purple | azure | green | orange | danger"
@@ -38,23 +118,22 @@ $row=mysqli_fetch_array($result);
       <div class="logo">
         <a href="dashboard.php" class="simple-text logo-normal">
         	<?php
-	        	$loggedInUserProfilePicUrl;
+            $loggedInUserProfilePicUrl;
 
-	        	if($session_profile_pic == ""){
-	        		$loggedInUserProfilePicUrl = "assets/img/no-profile-pic-available.jpg";
-	        	}else{
-	        		$loggedInUserProfilePicUrl = $session_profile_pic;
-	        	}
+            if($session_profile_pic == ""){
+              $loggedInUserProfilePicUrl = "assets/img/no-profile-pic-available.jpg";
+            }else{
+              $loggedInUserProfilePicUrl = $session_profile_pic;
+            }
 
-	        	echo '<img src=' . $loggedInUserProfilePicUrl . ' style="width: 80px; height: 70px; border-radius: 50%;"><br>';
-        	?>
-        	
+            echo '<img src=' . $loggedInUserProfilePicUrl . ' style="width: 80px; height: 70px; border-radius: 50%;"><br>';
+          ?>
+
         	<strong><?php echo $session_fullname ?><br>
-          		<span style="font-size: 12px;"><?php echo $session_role ?></span>
+          <span style="font-size: 12px;"><?php echo $session_role ?></span>
         	</strong>
         </a>
       </div>
-
       <div class="sidebar-wrapper">
         <ul class="nav">
           <li class="nav-item">
@@ -63,13 +142,13 @@ $row=mysqli_fetch_array($result);
               <p>Dashboard</p>
             </a>
           </li>
-          <li class="nav-item active">
+          <li class="nav-item ">
             <a class="nav-link" href="newsfeed.php">
               <i class="material-icons">web</i>
               <p>Newsfeed</p>
             </a>
           </li>
-
+          
           <?php
             if($session_role == "SUPER_ADMIN"){
               echo '' .
@@ -80,7 +159,7 @@ $row=mysqli_fetch_array($result);
                 '</a>' .
               '</li>' .
 
-              '<li class="nav-item ">' .
+              '<li class="nav-item active">' .
                 '<a class="nav-link" href="users.php">' .
                   '<i class="material-icons">person</i>' .
                   '<p>Users</p>' .
@@ -103,10 +182,13 @@ $row=mysqli_fetch_array($result);
       <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
         <div class="container-fluid">
           <div class="navbar-wrapper">
-            <a class="navbar-brand" href="#pablo">Newsfeed</a>&nbsp;&nbsp;&nbsp;
-            <!--
-            <button type="button" class="btn btn-warning pull-right"> <i class="material-icons">create</i> Add Post</button>
-            -->
+            <a class="navbar-brand" href="#pablo">Users</a>&nbsp;&nbsp;&nbsp;
+
+            <?php
+              if($session_role == "SUPER_ADMIN"){
+                echo '<button type="button" class="btn btn-warning pull-right" data-toggle="modal" data-target="#btnAddAdminUser"> <i class="material-icons">create</i> Add Admin User</button>';
+              }
+            ?>
           </div>
         </div>
       </nav>
@@ -114,36 +196,71 @@ $row=mysqli_fetch_array($result);
       <div class="content">
         <div class="container-fluid">
           <div class="row" style="margin-left: auto; margin-right: auto;">
-          	<?php 
-          	global $session_id;
-          	include('../showAllPost.php'); 
-          	
-          	?>
-          	<!--
-            <div class="col-md-10">
-              <div class="media">
-
-                <div class="media-left">
-                  <img src="assets/img/faces/marc.jpg" class="media-object" style="width:60px; padding-right: 10px;">
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-header card-header-primary">
+                  <h4 class="card-title ">Users List</h4>
+                  <p class="card-category"> Here is the list of users</p>
                 </div>
+                <div class="card-body">
+                  <div class="table-responsive">
+                    <table class="table">
+                      <thead class=" text-primary">
+                        <th>Fullname</th>
+                        <th>Email</th>
+                        <th>Address</th>
+                        <th>Role</th>
+                        <th>Agency</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                      </thead>
+                      <tbody>
+                      	<?php 
+                      		$records = mysqli_query($con,"SELECT users.*, agency.AgencyCaption FROM tblusers users LEFT JOIN tblagency agency ON users.Agency=agency.AgencyID WHERE users.UserRole != 'SUPER_ADMIN' ORDER BY users.ID DESC") OR die("Query fail: " . mysqli_error());
 
-                <div class="media-body">
-                  <h4 class="media-heading">Jomari A. Rejuso<br><span style="font-size: 15px;">As of now</span></h4>
-                  <hr width="100%">
-                  <p>
-                    <b>Attention: </b> Fire Manila-Philippines, BFP-Manila Chapter<br>
-                    <b>Status: </b> Reported<br>
-                  </p>
-                  <hr width="100%">
-                  Fire hit a residential area and a portion of the University of Manila's College of Law in Sampaloc, Manila.<br>
-                  <img src="assets/img/cover.jpg" class="img-thumbnail" width="400" height="300"><br>
-
-                  <button type="button" class="btn btn-warning pull-right"> <i class="material-icons">visibility</i> View Comments</button>
+            						    $users = array();
+            						    while ($user =  mysqli_fetch_assoc($records))
+            						    {
+            						        $users[] = $user;
+            						    }
+            						    foreach ($users as $user)
+            						    {
+            						?>
+            						    <tr>
+            						        <td><?php echo $user['Fullname']; ?></td>
+            						        <td><?php echo $user['Email']; ?></td>
+            						        <td><?php echo $user['Address']; ?></td>
+            						        <td><?php echo $user['UserRole']; ?></td>
+                                <td>
+                                  <?php 
+                                    if($user['UserRole'] == 'ADMIN'){
+                                      echo $user['AgencyCaption']; 
+                                    }else{
+                                      echo 'N/A';
+                                    }
+                                  ?>
+                                </td>
+                                <td><?php echo $user['UserStatus']; ?></td>
+                                <td>
+                                  <?php 
+                                    if($user['UserStatus'] == 'Disapproved'){
+                                      echo '<button type="button" class="btn btn-info pull-left"> <i class="material-icons">verified_user</i> <a href="../updateStatusOfUser.php?userID=' . $user['ID'] . '&status=Approved" style="color: white;">Approve</a></button>';
+                                    }else{
+                                      echo '<button type="button" class="btn btn-warning pull-left"> <i class="material-icons">block</i> <a href="../updateStatusOfUser.php?userID=' . $user['ID'] . '&status=Disapproved" style="color: white;">Disapprove</a></button>';
+                                    }
+                                  ?>
+                                </td>
+            						    </tr>
+            						<?php
+            						    }
+            						?>
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
-                
               </div>
             </div>
-        	-->
+
           </div>
         </div>
       </div>

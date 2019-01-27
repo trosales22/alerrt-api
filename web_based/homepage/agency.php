@@ -139,22 +139,24 @@ $row=mysqli_fetch_array($result);
           </li>
           
           <?php
-            if($session_role == "ADMIN"){
-              echo '<li class="nav-item ">' .
+            if($session_role == "SUPER_ADMIN"){
+              echo '' .
+              '<li class="nav-item active">' .
                 '<a class="nav-link" href="agency.php">' .
                   '<i class="material-icons">account_balance</i>' .
                   '<p>Agency</p>' .
+                '</a>' .
+              '</li>' .
+
+              '<li class="nav-item ">' .
+                '<a class="nav-link" href="users.php">' .
+                  '<i class="material-icons">person</i>' .
+                  '<p>Users</p>' .
                 '</a>' .
               '</li>';
             }
           ?>
 
-          <li class="nav-item ">
-            <a class="nav-link" href="#">
-              <i class="material-icons">assessment</i>
-              <p>Reports</p>
-            </a>
-          </li>
           <li class="nav-item ">
             <a class="nav-link" href="../logout.php">
               <i class="material-icons">exit_to_app</i>
@@ -172,7 +174,7 @@ $row=mysqli_fetch_array($result);
             <a class="navbar-brand" href="#pablo">Registered Agencies</a>&nbsp;&nbsp;&nbsp;
 
             <?php
-              if($session_role == "ADMIN"){
+              if($session_role == "SUPER_ADMIN"){
                 echo '<button type="button" class="btn btn-warning pull-right" data-toggle="modal" data-target="#btnAddAgency"> <i class="material-icons">create</i> Add Agency</button>';
               }
             ?>
@@ -202,7 +204,7 @@ $row=mysqli_fetch_array($result);
                       </thead>
                       <tbody>
                       	<?php 
-                      		$records = mysqli_query($con,"SELECT * FROM tblagency ORDER BY AgencyID DESC") OR die("Query fail: " . mysqli_error());
+                      		$records = mysqli_query($con,"SELECT * FROM tblagency ORDER BY AgencyCaption ASC") OR die("Query fail: " . mysqli_error());
 
 						    $projects = array();
 						    while ($project =  mysqli_fetch_assoc($records))

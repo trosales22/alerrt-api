@@ -12,7 +12,7 @@ function loginUser(){
 	$email = $_POST['email'];
 	$password = $_POST['password'];
 
-	$query=mysqli_query($con,"SELECT * FROM tblusers WHERE Email='$email' AND Password='$password'");
+	$query=mysqli_query($con,"SELECT * FROM tblusers WHERE Email='$email' AND Password='$password' AND UserRole='USER' AND UserStatus='Approved'");
   	$numrows=mysqli_num_rows($query);
 
   	if($numrows!=0){

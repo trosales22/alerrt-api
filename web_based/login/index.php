@@ -75,7 +75,7 @@
 						$email = mysqli_real_escape_string($con, $_POST['email']);
 						$password = mysqli_real_escape_string($con, $_POST['pass']);
 						
-						$query 		= mysqli_query($con, "SELECT * FROM tblusers WHERE Email='$email' AND Password='$password' AND UserRole != 'USER'");
+						$query 		= mysqli_query($con, "SELECT * FROM tblusers WHERE Email='$email' AND Password='$password' AND UserRole != 'USER' and UserStatus='Approved'");
 						$row		= mysqli_fetch_array($query);
 						$num_row 	= mysqli_num_rows($query);
 						
@@ -88,6 +88,8 @@
 
 							if($row['Agency'] != "" || $row['Agency'] != null){
 								$_SESSION['user_agency']=$row['Agency'];
+							}else{
+								$_SESSION['user_agency'] = '';
 							}
 
 							header('location:../homepage/dashboard.php');
