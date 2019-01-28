@@ -82,8 +82,39 @@
 
 				$btnResolvedStatus = '<button type="button" class="btn btn-warning pull-left"> <i class="material-icons">edit</i> <a href="../changeStatusOfReport.php?postID=' . $row['TopicID'] . '&statusType=Resolved&loggedInUser=' . $session_id . '" style="color: white;">Change Status (Resolved)</a></button>';
 
+				$selectAllAgencyExceptLoggedInAgency = '<select class="form-control" name="agency_id" required>';
+
+				$selectAllAgencyExceptLoggedInAgency .= '<option disabled selected>--CHOOSE AGENCY TO REASSIGN--</option>';
+
+
+				$queryAgencies="SELECT * FROM tblagency WHERE AgencyID != '$session_agency' ORDER BY AgencyCaption ASC";
+	      		$resultAgencies = mysqli_query($con,$queryAgencies);
+
+				$numrowsAgencies = mysqli_num_rows($resultAgencies);
+
+				if($numrowsAgencies > 0){
+					while($rowAgencies = mysqli_fetch_assoc($resultAgencies)){
+						$selectAllAgencyExceptLoggedInAgency .=  '<option value="' . $rowAgencies['AgencyID'] . '">' . $rowAgencies['AgencyCaption'] . '</option>';
+					}
+				}
+
+				$selectAllAgencyExceptLoggedInAgency .= '</select>';
+
+
+				$frmReassignToOtherAgency = '<form method="POST" action="../reassignTask.php?postID=' . $row['TopicID'] . '&loggedInUser=' . $session_id . '">' . 
+				                  '<div class="row">' . 
+				                  '<div class="col-md-5">' . 
+				                    '<div class="form-group">' . $selectAllAgencyExceptLoggedInAgency . 
+				                    '<button type="submit" class="btn btn-warning pull-left"> <i class="material-icons">edit</i> Reassign</button>' .
+				                    '</div>' . 
+				                  '</div>' . 
+				                '</div>' .
+
+				                '<hr width="100%">' .
+				                '</form>';
+
 				if($row['TopicStatus'] == 'Pending'){
-					$statusButtons = '&nbsp;&nbsp;' . $btnOngoingStatus . '&nbsp;&nbsp;' . $btnResolvedStatus;
+					$statusButtons = '&nbsp;&nbsp;' . $btnOngoingStatus . '&nbsp;&nbsp;' . $btnResolvedStatus . '<br><br>' . $frmReassignToOtherAgency;
 				} else if($row['TopicStatus'] == 'Ongoing'){
 					$statusButtons = '&nbsp;&nbsp;' . $btnResolvedStatus;
 				} else if($row['TopicStatus'] == 'Resolved'){

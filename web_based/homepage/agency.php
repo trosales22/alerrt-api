@@ -29,6 +29,25 @@ $row=mysqli_fetch_array($result);
 
 <body class="">
   <div class="wrapper ">
+    <div class="modal fade" id="btnShowAboutTheSystem" role="dialog">
+      <div class="modal-dialog modal-lg">
+      
+        <!-- Modal content-->
+        <div class="modal-content">
+        <h3 style="padding-left: 5px;"><b>About The System</b></h3><hr width="100%">
+        <p style="text-align: justify; padding: 10px;">
+          <b>APP-manila LOCAL EMERGENCY REPORTING AND RESPONSE TOOL (ALERRT)</b> is a way that seeks 
+          to encourage the people to become proactive members of the community by increasing their awareness thereby improving resilience 
+          and decreasing vulnerabilities. This will provide the citizens to have an easy means of reporting any incidents 
+          (emergencies,accidents or concerns) requiring response from any local or national units, allow citizen to have detailed documentation 
+          of the event (image, video capture), allow concerned government sector to act based on reported scenario and citizen can 
+          track down government actions.
+        </p>    
+        </div>
+        
+      </div>
+    </div>
+
   	<!-- Modal -->
   	<div class="modal fade" id="btnAddAgency" role="dialog">
 	    <div class="modal-dialog modal-lg">
@@ -158,6 +177,13 @@ $row=mysqli_fetch_array($result);
           ?>
 
           <li class="nav-item ">
+            <a class="nav-link" style="cursor: pointer;" data-toggle="modal" data-target="#btnShowAboutTheSystem">
+              <i class="material-icons">info</i>
+              <p>About The System</p>
+            </a>
+          </li>
+
+          <li class="nav-item ">
             <a class="nav-link" href="../logout.php">
               <i class="material-icons">exit_to_app</i>
               <p>Logout</p>
@@ -171,7 +197,6 @@ $row=mysqli_fetch_array($result);
       <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
         <div class="container-fluid">
           <div class="navbar-wrapper">
-            <a class="navbar-brand" href="#pablo">Registered Agencies</a>&nbsp;&nbsp;&nbsp;
 
             <?php
               if($session_role == "SUPER_ADMIN"){
@@ -188,9 +213,8 @@ $row=mysqli_fetch_array($result);
           <div class="row" style="margin-left: auto; margin-right: auto;">
             <div class="col-md-12">
               <div class="card">
-                <div class="card-header card-header-primary">
-                  <h4 class="card-title ">Registered Agencies List</h4>
-                  <p class="card-category"> Here is the list of registered agencies</p>
+                <div class="card-header card-header-warning">
+                  <h4 class="card-title ">Registered Agencies</h4>
                 </div>
                 <div class="card-body">
                   <div class="table-responsive">

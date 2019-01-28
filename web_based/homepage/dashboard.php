@@ -21,12 +21,23 @@ if($session_role == "ADMIN"){
 			if($topicStatus == "Pending"){
 				$countPending++;
 				array_push($dataPoints, array("label"=>$topicStatus, "y"=>$countPending));
-			}else if($topicStatus == "Ongoing"){
+			}else{
+				array_push($dataPoints, array("label"=>"Pending", "y"=>0));
+			}
+
+
+			if($topicStatus == "Ongoing"){
 				$countOngoing++;
 				array_push($dataPoints, array("label"=>$topicStatus, "y"=>$countOngoing));
-			}else if($topicStatus == "Resolved"){
+			}else{
+				array_push($dataPoints, array("label"=>"Ongoing", "y"=>0));
+			}
+
+			if($topicStatus == "Resolved"){
 				$countResolved++;
 				array_push($dataPoints, array("label"=>$topicStatus, "y"=>$countResolved));
+			}else{
+				array_push($dataPoints, array("label"=>"Resolved", "y"=>0));
 			}
 		}
 	}
@@ -77,6 +88,25 @@ if($session_role == "ADMIN"){
 
 <body class="">
   <div class="wrapper ">
+  	<div class="modal fade" id="btnShowAboutTheSystem" role="dialog">
+	    <div class="modal-dialog modal-lg">
+	    
+	      <!-- Modal content-->
+	      <div class="modal-content">
+	    	<h3 style="padding-left: 5px;"><b>About The System</b></h3><hr width="100%">
+	    	<p style="text-align: justify; padding: 10px;">
+	    		<b>APP-manila LOCAL EMERGENCY REPORTING AND RESPONSE TOOL (ALERRT)</b> is a way that seeks 
+	    		to encourage the people to become proactive members of the community by increasing their awareness thereby improving resilience 
+	    		and decreasing vulnerabilities. This will provide the citizens to have an easy means of reporting any incidents 
+	    		(emergencies,accidents or concerns) requiring response from any local or national units, allow citizen to have detailed documentation 
+	    		of the event (image, video capture), allow concerned government sector to act based on reported scenario and citizen can 
+	    		track down government actions.
+	    	</p>  	
+	      </div>
+	      
+	    </div>
+  	</div>
+
     <div class="sidebar" data-color="orange" data-background-color="white" data-image="assets/img/sidebar-1.jpg">
       <!--
         Tip 1: You can change the color of the sidebar using: data-color="purple | azure | green | orange | danger"
@@ -137,6 +167,14 @@ if($session_role == "ADMIN"){
           ?>
 
           <li class="nav-item ">
+            <a class="nav-link" style="cursor: pointer;" data-toggle="modal" data-target="#btnShowAboutTheSystem">
+              <i class="material-icons">info</i>
+              <p>About The System</p>
+            </a>
+          </li>
+
+
+          <li class="nav-item ">
             <a class="nav-link" href="../logout.php">
               <i class="material-icons">exit_to_app</i>
               <p>Logout</p>
@@ -161,6 +199,52 @@ if($session_role == "ADMIN"){
         <div class="container-fluid">
           <div class="row">
             <div id="chartContainer" style="height: 370px; width: 100%;"></div>
+
+            <br><br>
+
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-header card-header-warning">
+                  <h4 class="card-title ">Notifications</h4>
+                </div>
+                <div class="card-body">
+                  <div class="table-responsive">
+                    <table class="table">
+                      <thead class=" text-primary">
+                        <th>Topic Title</th>
+                        <th>Topic Status</th>
+                        <th>Status By</th>
+                        <th>Date And Time</th>
+                      </thead>
+                      <tbody>
+                        <?php 
+                          $records = mysqli_query($con,"SELECT B.TopicTitle,A.StatusType,C.Fullname,A.StatusDateAndTime FROM tblstatus A LEFT JOIN tblposts B ON A.StatusPostID=B.TopicID LEFT JOIN tblusers C ON A.StatusBy=C.UserID") OR die("Query fail: " . mysqli_error());
+
+                            $users = array();
+                            while ($user =  mysqli_fetch_assoc($records))
+                            {
+                                $users[] = $user;
+                            }
+                            foreach ($users as $user)
+                            {
+                        ?>
+                            <tr>
+                                <td><?php echo $user['TopicTitle']; ?></td>
+                                <td><?php echo $user['StatusType']; ?></td>
+                                <td><?php echo $user['Fullname']; ?></td>
+                                <td><?php echo $user['StatusDateAndTime']; ?></td>
+                            </tr>
+                        <?php
+                            }
+                        ?>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
           </div>
         </div>
       </div>
