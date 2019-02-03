@@ -1,37 +1,7 @@
 <?php
-if($_SERVER["REQUEST_METHOD"] != "POST"){
+if($_SERVER["REQUEST_METHOD"] == "POST"){
 	require 'database.php';
-	require_once('geoplugin.php');
-	$geoplugin = new geoPlugin();
-
-	// If we wanted to change the base currency, we would uncomment the following line
-	$geoplugin->currency = 'PHP';
-	 
-	$geoplugin->locate();
-	 
-	echo $geoplugin->ip;
-
-	/*
-	echo "Geolocation results for {$geoplugin->ip}: <br />\n".
-		"City: {$geoplugin->city} <br />\n".
-		"Region: {$geoplugin->region} <br />\n".
-		"Region Code: {$geoplugin->regionCode} <br />\n".
-		"Region Name: {$geoplugin->regionName} <br />\n".
-		"DMA Code: {$geoplugin->dmaCode} <br />\n".
-		"Country Name: {$geoplugin->countryName} <br />\n".
-		"Country Code: {$geoplugin->countryCode} <br />\n".
-		"In the EU?: {$geoplugin->inEU} <br />\n".
-		"EU VAT Rate: {$geoplugin->euVATrate} <br />\n".
-		"Latitude: {$geoplugin->latitude} <br />\n".
-		"Longitude: {$geoplugin->longitude} <br />\n".
-		"Radius of Accuracy (Miles): {$geoplugin->locationAccuracyRadius} <br />\n".
-		"Timezone: {$geoplugin->timezone}  <br />\n".
-		"Currency Code: {$geoplugin->currencyCode} <br />\n".
-		"Currency Symbol: {$geoplugin->currencySymbol} <br />\n".
-		"Exchange Rate: {$geoplugin->currencyConverter} <br />\n";
-		*/
-	 
-	//registerUser();
+	registerUser();
 }else{
 	echo "Oops! We're sorry! You do not have access to this option!";
 }

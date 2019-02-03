@@ -7,6 +7,9 @@
 		global $session_id;
 		global $session_agency;
 
+		require_once('geoplugin.php');
+		$geoplugin = new geoPlugin();
+
 		if($session_agency == ''){
 			$query="SELECT posts.*,users.ProfilePicture AS TopicPostedBy_ProfilePicture, users.Fullname AS TopicPostedBy_Fullname, users.Email AS TopicPostedBy_Email FROM tblposts posts LEFT JOIN tblusers users ON posts.TopicPostedBy=users.UserID ORDER BY posts.TopicID DESC";
 		}else{
@@ -26,6 +29,10 @@
 
 			while($row = mysqli_fetch_assoc($result)){
 				$postID = $row['TopicID'];
+				$geoplugin->locate($row['PosterLocationIPAddress']);
+
+				$city = $geoplugin->city;
+				$region = $geoplugin->region;
 
 				//comments
 				$queryComments="SELECT comments.*,users.ProfilePicture AS CommentBy_ProfilePicture, users.Fullname AS CommentBy_Fullname, users.Email AS CommentBy_Email FROM tblcomments comments LEFT JOIN tblusers users ON comments.CommentBy=users.UserID WHERE comments.PostID='$postID' ORDER BY comments.CommentID DESC";
@@ -121,6 +128,18 @@
 					$statusButtons = '';
 				}
 				
+				$locationName;
+
+	            if($row['TopicLocationName'] == ""){
+	            	$locationName = $city . ', ' . $region;
+	            }else{
+	              	$locationName = $row['TopicLocationName'];
+	            }
+
+	            if($locationName == ""){
+	            	$locationName = "N/A";
+	            }
+
 				$values .= 	'<div class="col-md-12" style="margin-bottom: 25px;">' .
 				              '<div class="media">' .
 
@@ -129,8 +148,8 @@
 				                '</div>' .
 
 				                '<div class="media-body">' .
-				                  '<h4 class="media-heading">' . $row['TopicPostedBy_Fullname'] . '<br><span style="font-size: 15px;"><i style="vertical-align: middle;" class="material-icons">date_range</i> ' . $row['TopicDateAndTimePosted'] . '</span></h4>' .
-				                  '<span style="vertical-align: middle;"><i style="vertical-align: middle;" class="material-icons">my_location</i> ' . $row['TopicLocationName'] . '</span>' .
+				                  '<h4 class="media-heading">' . $row['TopicPostedBy_Fullname'] . '<br><span style="font-size: 15px;"><i style="vertical-align: middle;" class="material-icons">date_range</i> ' . $row['TopicDateAndTimePosted'] . '</span></h4>' . 
+				                  '<span style="vertical-align: middle;"><i style="vertical-align: middle;" class="material-icons">my_location</i> ' . $locationName . '</span>' .
 				                  '<hr width="100%">' .
 				                  '<p>' .
 				                    '<b>Status: </b> ' . $row['TopicStatus'] . '<br>' .
