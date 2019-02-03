@@ -169,7 +169,7 @@ $row=mysqli_fetch_array($result);
           </li>
           
           <?php
-            if($session_role == "SUPER_ADMIN"){
+            if($session_role == "SUPER_ADMIN" || $session_role == "ADMIN"){
               echo '' .
               '<li class="nav-item ">' .
                 '<a class="nav-link" href="agency.php">' .

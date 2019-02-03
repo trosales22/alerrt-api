@@ -22,6 +22,11 @@ function addPost(){
 	$topicLocationID = $_POST['topicLocationID'];
 	$topicLocationName = $_POST['topicLocationName'];
 	$topicLocationAddress = $_POST['topicLocationAddress'];
+
+	if($topicLocationID == "" || $topicLocationName == "" || $topicLocationAddress == ""){
+		$topicPosterIpAddress = $_SERVER['REMOTE_ADDR'];
+	}
+
 	$topicAgencyID = $_POST['topicAgencyID'];
 	$topicStatus = 'Pending';
 	$topicPostedBy = $_POST['topicPostedBy'];
@@ -40,12 +45,12 @@ function addPost(){
 		fclose($file);
 	}
 
-	$query = "INSERT INTO tblposts(TopicTitle,TopicImage,TopicLocationID,TopicLocationName,TopicLocationAddress,TopicAgencyID,TopicStatus,TopicPostedBy,TopicDateAndTimePosted) 
-		VALUES (?,?,?,?,?,?,?,?,?)";
+	$query = "INSERT INTO tblposts(TopicTitle,TopicImage,TopicLocationID,TopicLocationName,TopicLocationAddress,TopicAgencyID,TopicStatus,TopicPostedBy,TopicDateAndTimePosted,PosterLocationIPAddress) 
+		VALUES (?,?,?,?,?,?,?,?,?,?)";
 
 	$stmt = mysqli_prepare($con,$query);
 
-	mysqli_stmt_bind_param($stmt,"sssssssss",$topicTitle,$actualPath,$topicLocationID,$topicLocationName,$topicLocationAddress,$topicAgencyID,$topicStatus,$topicPostedBy,$topicDateAndTimePosted);
+	mysqli_stmt_bind_param($stmt,"ssssssssss",$topicTitle,$actualPath,$topicLocationID,$topicLocationName,$topicLocationAddress,$topicAgencyID,$topicStatus,$topicPostedBy,$topicDateAndTimePosted,$topicPosterIpAddress);
 
 	mysqli_stmt_execute($stmt);
 

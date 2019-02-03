@@ -129,14 +129,17 @@
 				                '</div>' .
 
 				                '<div class="media-body">' .
-				                  '<h4 class="media-heading">' . $row['TopicPostedBy_Fullname'] . '<br><span style="font-size: 15px;">' . $row['TopicDateAndTimePosted'] . '</span></h4>' .
+				                  '<h4 class="media-heading">' . $row['TopicPostedBy_Fullname'] . '<br><span style="font-size: 15px;"><i style="vertical-align: middle;" class="material-icons">date_range</i> ' . $row['TopicDateAndTimePosted'] . '</span></h4>' .
+				                  '<span style="vertical-align: middle;"><i style="vertical-align: middle;" class="material-icons">my_location</i> ' . $row['TopicLocationName'] . '</span>' .
 				                  '<hr width="100%">' .
 				                  '<p>' .
 				                    '<b>Status: </b> ' . $row['TopicStatus'] . '<br>' .
 				                    $statusButtons . 
 				                  '</p><br><br>' .
+
 				                  '<hr width="100%">' .
 				                   $row['TopicTitle'] . '<br>' .
+				                   
 				                  
 				                  '<img src="' . $topicImageUrl .'" class="img-thumbnail" width="400" height="300" style="max-height: 300px; max-width: 400px;"><br><br>' .
 

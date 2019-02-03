@@ -13,7 +13,7 @@ function showAllNotifReportStatus(){
 	
 	$loggedInUser = $_GET['loggedInUser'];
 
-	$query="SELECT posts.TopicTitle as StatusTopicTitle, status.* FROM tblstatus status LEFT JOIN tblposts posts ON status.StatusPostID = posts.TopicID WHERE posts.TopicPostedBy='$loggedInUser' WHERE status.StatusType != 'Reassigned' ORDER BY status.StatusID DESC";
+	$query="SELECT B.TopicTitle as StatusTopicTitle,C.AgencyCaption as StatusAgencyCaption, A.* FROM tblstatus A LEFT JOIN tblposts B ON A.StatusPostID = B.TopicID LEFT JOIN tblagency C ON B.TopicAgencyID = C.AgencyID WHERE B.TopicPostedBy='$loggedInUser' ORDER BY A.StatusID DESC";
 
 	$result = mysqli_query($con,$query);
 
@@ -27,6 +27,7 @@ function showAllNotifReportStatus(){
 				'StatusID' => $row['StatusID'],
 				'StatusPostID' => $row['StatusPostID'],
 				'StatusTopicTitle' => $row['StatusTopicTitle'],
+				'StatusAgencyCaption' => $row['StatusAgencyCaption'],
 				'StatusType' => $row['StatusType'],
 				'StatusDateAndTime' => $row['StatusDateAndTime'],
 				'updaterInfo' => []
