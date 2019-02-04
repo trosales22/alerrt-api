@@ -23,15 +23,12 @@ function registerUser(){
 	$gender = $_POST['gender'];
 	$dateAndTimeRegistered = $_POST['dateAndTimeRegistered'];
 
-	$ipAddress = $geoplugin->ip;
-	$city = $geoplugin->city;
-	$region = $geoplugin->region;
 	$latLong = $geoplugin->latitude . ',' . $geoplugin->longitude;
-	
 	$countryName = $geoplugin->countryName;
 
 	$birthdate = $_POST['birthdate'];
 	$userRole = 'USER';
+	$userStatus = 'Disapproved';
 
 	if($countryName != "Philippines"){
 		echo "You are not from the Philippines! Please try again!";
@@ -41,12 +38,12 @@ function registerUser(){
 	    $numrows=mysqli_num_rows($queryToDetectIfExisting);
 
 	    if($numrows==0){
-			$query = "INSERT INTO tblusers(UserID,Fullname,Email,MobileNumber,Gender,Password,DateAndTimeRegistered,Birthdate,UserRole,IP_ADDRESS,City,Region,LatLong) 
-			VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+			$query = "INSERT INTO tblusers(UserID,Fullname,Email,MobileNumber,Gender,Password,DateAndTimeRegistered,Birthdate,UserRole,LatLong,UserStatus) 
+			VALUES (?,?,?,?,?,?,?,?,?,?,?)";
 
 			$stmt = mysqli_prepare($con,$query);
 
-			mysqli_stmt_bind_param($stmt,"sssssssssssss",$id,$fullname,$email,$mobileNumber,$gender,$password,$dateAndTimeRegistered,$birthdate,$userRole,$ipAddress,$city,$region,$latLong);
+			mysqli_stmt_bind_param($stmt,"sssssssssss",$id,$fullname,$email,$mobileNumber,$gender,$password,$dateAndTimeRegistered,$birthdate,$userRole,$latLong,$userStatus);
 
 			mysqli_stmt_execute($stmt);
 

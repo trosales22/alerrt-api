@@ -7,20 +7,22 @@ function addAgency(){
 	global $con;
 	global $session_agency;
 
-	$agency_caption = $_POST['agency_caption'];
-	$agency_contactNumber = $_POST['agency_contactNumber'];
-	$agency_status = $_POST['agency_status'];
+	$agencyName = $_POST['agency_name'];
+	$agencyDescription = $_POST['agency_description'];
+	$agencyContactNumber = $_POST['agency_contact_number'];
+	$agencyAddress = $_POST['agency_address'];
+	$agencyStatus = $_POST['agency_status'];
 
-	$queryToDetectIfExisting=mysqli_query($con,"SELECT * FROM tblagency WHERE AgencyCaption='$agency_caption'");
+	$queryToDetectIfExisting=mysqli_query($con,"SELECT * FROM tblagency WHERE AgencyCaption='$agencyName'");
     $numrows=mysqli_num_rows($queryToDetectIfExisting);
 
     if($numrows==0){
-		$query = "INSERT INTO tblagency(AgencyCaption,AgencyContactNumber,AgencyStatus,AgencyMain) 
-		VALUES (?,?,?,?)";
+		$query = "INSERT INTO tblagency(AgencyCaption,AgencyDescription,AgencyContactNumber,AgencyLocation,AgencyStatus,AgencyMain) 
+		VALUES (?,?,?,?,?,?)";
 
 		$stmt = mysqli_prepare($con,$query);
 
-		mysqli_stmt_bind_param($stmt,"ssss",$agency_caption,$agency_contactNumber,$agency_status,$session_agency);
+		mysqli_stmt_bind_param($stmt,"ssssss",$agencyName,$agencyDescription,$agencyContactNumber,$agencyAddress,$agencyStatus,$session_agency);
 
 		mysqli_stmt_execute($stmt);
 

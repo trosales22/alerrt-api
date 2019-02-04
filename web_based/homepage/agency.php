@@ -64,12 +64,12 @@ $row=mysqli_fetch_array($result);
 		        <div class="modal-body">
 		        	<h4><strong>
 		        	<?php 
-						if($session_role == "SUPER_ADMIN"){
-							echo "Add Agency";
-						}else if($session_role == "ADMIN"){
-							echo "Add Sub-Agency";
-						}
-					?>	
+    						if($session_role == "SUPER_ADMIN"){
+    							echo "Add Agency";
+    						}else if($session_role == "ADMIN"){
+    							echo "Add Sub-Agency";
+    						}
+    					?>	
 					</strong></h4>
 
 					<hr width="100%">
@@ -78,16 +78,30 @@ $row=mysqli_fetch_array($result);
 	                  <div class="col-md-12">
 	                    <div class="form-group">
 	                      <label class="bmd-label-floating">Agency Name</label>
-	                      <input type="text" class="form-control" name="agency_caption" required maxlength="50">
+	                      <input type="text" class="form-control" name="agency_name" required maxlength="50">
 	                    </div>
 	                  </div>
 
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <label class="bmd-label-floating">Agency Description</label>
+                        <textarea cols=50 rows=5 class="form-control" name="agency_description" required maxlength="1000"></textarea>
+                      </div>
+                    </div>
+
 	                  <div class="col-md-12">
 	                    <div class="form-group">
-	                      <label class="bmd-label-floating">Phone Number</label>
-	                      <input type="text" class="form-control" name="agency_contactNumber" required>
+	                      <label class="bmd-label-floating">Agency Contact Number</label>
+	                      <input type="text" class="form-control" name="agency_contact_number" required>
 	                    </div>
 	                  </div>
+
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <label class="bmd-label-floating">Agency Address</label>
+                        <textarea cols=50 rows=5 class="form-control" name="agency_address" required maxlength="500"></textarea>
+                      </div>
+                    </div>
 
 	                  <div class="col-md-12">
 	                    <div class="form-group">
@@ -107,8 +121,16 @@ $row=mysqli_fetch_array($result);
 		        </div>
 
 		        <div class="modal-footer">
-		        	<button type="submit" class="btn btn-warning pull-right">Add Sub-Agency</button>
-		          	<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		        	<button type="submit" class="btn btn-warning pull-right">
+              <?php 
+                if($session_role == "SUPER_ADMIN"){
+                  echo "Add Agency";
+                }else if($session_role == "ADMIN"){
+                  echo "Add Sub-Agency";
+                }
+              ?>
+              </button>
+		          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 		        </div>
 	        </form>
 	      </div>
@@ -230,7 +252,10 @@ $row=mysqli_fetch_array($result);
                     <table class="table">
                       <thead class=" text-primary">
                         <th>Agency Name</th>
-                        <th>Contact Number</th>
+                        <th>Agency Description</th>
+                        <th>Agency Contact Number</th>
+                        <th>Agency Location</th>
+                        <th>Action</th>
                       </thead>
                       <tbody>
                       	<?php 
@@ -240,21 +265,48 @@ $row=mysqli_fetch_array($result);
                       			$records = mysqli_query($con,"SELECT * FROM tblagency WHERE AgencyMain != '' ORDER BY AgencyCaption ASC") OR die("Query fail: " . mysqli_error());
                       		}
 
-						    $projects = array();
-						    while ($project =  mysqli_fetch_assoc($records))
-						    {
-						        $projects[] = $project;
-						    }
-						    foreach ($projects as $project)
-						    {
-						?>
-						    <tr>
-						        <td><?php echo $project['AgencyCaption']; ?></td>
-						        <td><?php echo str_replace(",", "<br>", $project['AgencyContactNumber']); ?></td>
-						    </tr>
-						<?php
-						    }
-						?>
+            						    $projects = array();
+            						    while ($project =  mysqli_fetch_assoc($records))
+            						    {
+            						        $projects[] = $project;
+            						    }
+            						    foreach ($projects as $project)
+            						    {
+            						?>
+            						    <tr>
+            						        <td><?php echo $project['AgencyCaption']; ?></td>
+                                <td>
+                                  <?php 
+                                    if($project['AgencyDescription'] == ""){
+                                      echo "No description yet!";
+                                    }else{
+                                      echo $project['AgencyDescription'];
+                                    }
+                                  ?>
+                                </td>
+            						        <td><?php echo str_replace(",", "<br>", $project['AgencyContactNumber']); ?></td>
+                                <td>
+                                  <?php 
+                                    if($project['AgencyLocation'] == ""){
+                                      echo "No location yet!";
+                                    }else{
+                                      echo $project['AgencyLocation'];
+                                    }
+                                  ?>
+                                </td>
+                                <td>
+                                  <?php 
+                                    if($session_role == "SUPER_ADMIN"){
+                                      echo '<button type="button" class="btn btn-warning pull-left"> <i class="material-icons">edit</i> <a href="#" style="color: white;">Edit Agency</a></button>';
+                                    }else{
+                                      echo "<strong>Access Denied!</strong>";
+                                    }
+                                  ?>
+                                </td>
+            						    </tr>
+            						<?php
+            						    }
+            						?>
                       </tbody>
                     </table>
                   </div>

@@ -7,38 +7,19 @@ $row=mysqli_fetch_array($result);
 $dataPoints = array();
 
 if($session_role == "ADMIN"){
-	$countPending = 0;
-	$countOngoing = 0;
-	$countResolved = 0;
+  $queryForGettingStatusOfReport = "SELECT count(case when A.TopicStatus='Pending' then 1 end) as pending_count,count(case when A.TopicStatus='Ongoing' then 1 end) as ongoing_count,count(case when A.TopicStatus='Resolved' then 1 end) as resolved_count FROM tblposts A WHERE A.TopicAgencyID='$session_agency'";
 
-	$queryForGettingStatusOfReport = "SELECT TopicStatus FROM tblposts WHERE TopicAgencyID='$session_agency'";
 	$resultForGettingStatusOfReport = mysqli_query($con,$queryForGettingStatusOfReport);
 	$numrowsForGettingStatusOfReport = mysqli_num_rows($resultForGettingStatusOfReport);
 	if($numrowsForGettingStatusOfReport > 0){
-		while($rowForGettingStatusOfReport = mysqli_fetch_assoc($resultForGettingStatusOfReport)){
-			$topicStatus = $rowForGettingStatusOfReport['TopicStatus'];
+		if($rowForGettingStatusOfReport = mysqli_fetch_assoc($resultForGettingStatusOfReport)){
+			$pendingCount = $rowForGettingStatusOfReport['pending_count'];
+      $ongoingCount = $rowForGettingStatusOfReport['ongoing_count'];
+      $resolvedCount = $rowForGettingStatusOfReport['resolved_count'];
 
-			if($topicStatus == "Pending"){
-				$countPending++;
-				array_push($dataPoints, array("label"=>$topicStatus, "y"=>$countPending));
-			}else{
-				array_push($dataPoints, array("label"=>"Pending", "y"=>0));
-			}
-
-
-			if($topicStatus == "Ongoing"){
-				$countOngoing++;
-				array_push($dataPoints, array("label"=>$topicStatus, "y"=>$countOngoing));
-			}else{
-				array_push($dataPoints, array("label"=>"Ongoing", "y"=>0));
-			}
-
-			if($topicStatus == "Resolved"){
-				$countResolved++;
-				array_push($dataPoints, array("label"=>$topicStatus, "y"=>$countResolved));
-			}else{
-				array_push($dataPoints, array("label"=>"Resolved", "y"=>0));
-			}
+      array_push($dataPoints, array("label"=>"Pending", "y"=>$pendingCount));
+      array_push($dataPoints, array("label"=>"Ongoing", "y"=>$ongoingCount));
+      array_push($dataPoints, array("label"=>"Resolved", "y"=>$resolvedCount));
 		}
 	}
 }else if($session_role == "SUPER_ADMIN"){
@@ -188,7 +169,17 @@ if($session_role == "ADMIN"){
       <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
         <div class="container-fluid">
           <div class="navbar-wrapper">
-            <a class="navbar-brand" href="#pablo">Dashboard</a>
+            <a class="navbar-brand">
+              <b>
+                <?php
+                  if($session_role == "SUPER_ADMIN"){
+                    echo "Dashboard<br/>Chart below is the total count of resolved issues/reports for each agency.";
+                  }else if($session_role == "ADMIN"){
+                    echo "Dashboard<br/>Chart below is the count of (PENDING,ONGOING & RESOLVED) issues/reports for specific agency (LOGGED-IN USER).";
+                  }
+                ?>
+              </b>
+            </a>
           </div>
 
          
@@ -491,7 +482,7 @@ if($session_role == "ADMIN"){
 				exportEnabled: true,
 				theme: "dark2", // "light1", "light2", "dark1", "dark2"
 				title: {
-					text: "Percentage Of Report Status By Agency"
+					text: ""
 				},
 				subtitles: [{
 					text: ""
