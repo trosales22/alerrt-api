@@ -5,6 +5,8 @@ include('../session.php');
 $result=mysqli_query($con, "SELECT * FROM tblusers WHERE ID='$session_id'") or die('Error In Session. Please try again!');
 $row=mysqli_fetch_array($result);
 
+$agencyCaption = "";
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -127,6 +129,89 @@ $row=mysqli_fetch_array($result);
                   echo "Add Agency";
                 }else if($session_role == "ADMIN"){
                   echo "Add Sub-Agency";
+                }
+              ?>
+              </button>
+		          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		        </div>
+	        </form>
+	      </div>
+	      
+	    </div>
+  	</div>
+
+  	<div class="modal fade" id="btnEditAgency" role="dialog">
+	    <div class="modal-dialog modal-lg">
+	    
+	      <!-- Modal content-->
+	      <div class="modal-content">
+	      	<form method="POST" action="../editAgency.php">
+		        <div class="modal-body">
+		        	<h4><strong>
+		        	<?php 
+						if($session_role == "SUPER_ADMIN"){
+							echo "Edit Agency";
+						}else if($session_role == "ADMIN"){
+							echo "Edit Sub-Agency";
+						}
+					?>
+					</strong></h4>
+
+					<hr width="100%">
+		          
+	                <div class="row">
+	                  <div class="col-md-12">
+	                    <div class="form-group">
+	                      <label class="bmd-label-floating">Agency Name</label>
+	                      <input type="text" class="form-control" name="agency_name" id="txtAgencyName" required maxlength="50">
+	                    </div>
+	                  </div>
+
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <label class="bmd-label-floating">Agency Description</label>
+                        <textarea cols=50 rows=5 class="form-control" name="agency_description" required maxlength="1000"></textarea>
+                      </div>
+                    </div>
+
+	                  <div class="col-md-12">
+	                    <div class="form-group">
+	                      <label class="bmd-label-floating">Agency Contact Number</label>
+	                      <input type="text" class="form-control" name="agency_contact_number" required>
+	                    </div>
+	                  </div>
+
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <label class="bmd-label-floating">Agency Address</label>
+                        <textarea cols=50 rows=5 class="form-control" name="agency_address" required maxlength="500"></textarea>
+                      </div>
+                    </div>
+
+	                  <div class="col-md-12">
+	                    <div class="form-group">
+	                      <select class="form-control" name="agency_status" required>
+	                      	<option value="----CHOOSE STATUS----" disabled selected>----CHOOSE STATUS----</option>
+	                      	<option value="Active">Active</option>
+	                      	<option value="Inactive">Inactive</option>
+	                      </select>
+	                    </div>
+	                  </div>
+
+	                </div>
+	   
+	                
+	                <div class="clearfix"></div>
+	              
+		        </div>
+
+		        <div class="modal-footer">
+		        	<button type="submit" class="btn btn-warning pull-right">
+              <?php 
+                if($session_role == "SUPER_ADMIN"){
+                  echo "Update Agency";
+                }else if($session_role == "ADMIN"){
+                  echo "Update Sub-Agency";
                 }
               ?>
               </button>
@@ -295,9 +380,9 @@ $row=mysqli_fetch_array($result);
                                   ?>
                                 </td>
                                 <td>
-                                  <?php 
+                                  <?php
                                     if($session_role == "SUPER_ADMIN"){
-                                      echo '<button type="button" class="btn btn-warning pull-left"> <i class="material-icons">edit</i> <a href="#" style="color: white;">Edit Agency</a></button>';
+                                      echo '<button type="button" class="btn btn-warning pull-left" data-toggle="modal" data-target="#btnEditAgency"> <i class="material-icons">edit</i> <a href="#" style="color: white;">Edit Agency</a></button>';
                                     }else{
                                       echo "<strong>Access Denied!</strong>";
                                     }

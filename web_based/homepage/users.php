@@ -127,16 +127,21 @@ function getAddressOfUserByLatLong($latLong){
 	                      <select class="form-control" name="agency_id" required>
 	                      	<option disabled selected>----CHOOSE AGENCY----</option>
 	                      	<?php
-	                      		$query="SELECT * FROM tblagency ORDER BY AgencyCaption ASC";
+                            if($session_role == "SUPER_ADMIN"){
+                              $query="SELECT * FROM tblagency ORDER BY AgencyCaption ASC";
+                            }else if($session_role == "ADMIN"){
+                              $query="SELECT * FROM tblagency WHERE AgencyMain='$session_agency' OR AgencyID='$session_agency' ORDER BY AgencyCaption ASC";
+                            }
+	                      		
 	                      		$result = mysqli_query($con,$query);
 
-								$numrows=mysqli_num_rows($result);
+            								$numrows=mysqli_num_rows($result);
 
-								if($numrows > 0){
-									while($row = mysqli_fetch_assoc($result)){
-										echo '<option value="' . $row['AgencyID'] . '">' . $row['AgencyCaption'] . '</option>';
-									}
-								}
+            								if($numrows > 0){
+            									while($row = mysqli_fetch_assoc($result)){
+            										echo '<option value="' . $row['AgencyID'] . '">' . $row['AgencyCaption'] . '</option>';
+            									}
+            								}
 	                      	?>
 	                      </select>
 	                    </div>
@@ -238,7 +243,7 @@ function getAddressOfUserByLatLong($latLong){
         <div class="container-fluid">
           <div class="navbar-wrapper">
             <?php
-              if($session_role == "SUPER_ADMIN"){
+              if($session_role == "SUPER_ADMIN" || $session_role == "ADMIN"){
                 echo '<button type="button" class="btn btn-warning pull-right" data-toggle="modal" data-target="#btnAddAdminUser"> <i class="material-icons">create</i> Add Admin User</button>';
               }
             ?>
@@ -268,7 +273,12 @@ function getAddressOfUserByLatLong($latLong){
                       </thead>
                       <tbody>
                       	<?php 
-                      		$records = mysqli_query($con,"SELECT users.*, agency.AgencyCaption FROM tblusers users LEFT JOIN tblagency agency ON users.Agency=agency.AgencyID WHERE users.UserRole != 'SUPER_ADMIN' ORDER BY users.ID DESC") OR die("Query fail: " . mysqli_error());
+                          if($session_role == "SUPER_ADMIN"){
+                            $records = mysqli_query($con,"SELECT users.*, agency.AgencyCaption FROM tblusers users LEFT JOIN tblagency agency ON users.Agency=agency.AgencyID WHERE users.UserRole != 'SUPER_ADMIN' ORDER BY users.ID DESC") OR die("Query fail: " . mysqli_error());
+                          }else if($session_role == "ADMIN"){
+                            $records = mysqli_query($con,"SELECT users.*, agency.AgencyCaption, agency.AgencyMain FROM tblusers users LEFT JOIN tblagency agency ON users.Agency=agency.AgencyID WHERE users.UserRole != 'SUPER_ADMIN' AND agency.AgencyMain = '$session_agency' ORDER BY users.ID DESC") OR die("Query fail: " . mysqli_error());
+                          }
+                      		
 
             						    $users = array();
             						    while ($user =  mysqli_fetch_assoc($records))
@@ -304,12 +314,12 @@ function getAddressOfUserByLatLong($latLong){
 			                                </td>
 			                                <td><?php echo $user['UserStatus']; ?></td>
 			                                <td>
-			                                  <?php 
-			                                    if($user['UserStatus'] == 'Disapproved'){
-			                                      echo '<button type="button" class="btn btn-info pull-left"> <i class="material-icons">verified_user</i> <a href="../updateStatusOfUser.php?userID=' . $user['ID'] . '&status=Approved" style="color: white;">Approve</a></button>';
-			                                    }else{
-			                                      echo '<button type="button" class="btn btn-warning pull-left"> <i class="material-icons">block</i> <a href="../updateStatusOfUser.php?userID=' . $user['ID'] . '&status=Disapproved" style="color: white;">Disapprove</a></button>';
-			                                    }
+			                                  <?php
+                                          if($user['UserStatus'] == 'Disapproved'){
+                                              echo '<button type="button" class="btn btn-info pull-left"> <i class="material-icons">verified_user</i> <a href="../updateStatusOfUser.php?userID=' . $user['ID'] . '&status=Approved" style="color: white;">Approve</a></button>';
+                                            }else if($user['UserStatus'] == 'Approved'){
+                                              echo '<button type="button" class="btn btn-warning pull-left"> <i class="material-icons">block</i> <a href="../updateStatusOfUser.php?userID=' . $user['ID'] . '&status=Disapproved" style="color: white;">Disapprove</a></button>';
+                                            }
 			                                  ?>
 			                                </td>
             						    </tr>

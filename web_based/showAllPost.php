@@ -93,8 +93,8 @@
 
 				$selectAllAgencyExceptLoggedInAgency .= '<option disabled selected>--CHOOSE AGENCY TO REASSIGN--</option>';
 
-
 				$queryAgencies="SELECT * FROM tblagency WHERE AgencyID != '$session_agency' ORDER BY AgencyCaption ASC";
+
 	      		$resultAgencies = mysqli_query($con,$queryAgencies);
 
 				$numrowsAgencies = mysqli_num_rows($resultAgencies);

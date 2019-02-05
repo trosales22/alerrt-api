@@ -1,20 +1,22 @@
 -- phpMyAdmin SQL Dump
--- version 4.0.10.7
--- http://www.phpmyadmin.net
+-- version 4.8.4
+-- https://www.phpmyadmin.net/
 --
--- Host: localhost:3306
--- Generation Time: Jan 26, 2019 at 05:01 AM
--- Server version: 10.0.27-MariaDB-cll-lve
--- PHP Version: 5.4.31
+-- Host: 127.0.0.1
+-- Generation Time: Feb 05, 2019 at 02:58 PM
+-- Server version: 10.1.37-MariaDB
+-- PHP Version: 7.3.0
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
 SET time_zone = "+00:00";
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
+/*!40101 SET NAMES utf8mb4 */;
 
 --
 -- Database: `dbalerrt`
@@ -26,28 +28,28 @@ SET time_zone = "+00:00";
 -- Table structure for table `tblagency`
 --
 
-CREATE TABLE IF NOT EXISTS `tblagency` (
-  `AgencyID` int(255) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `tblagency` (
+  `AgencyID` int(255) NOT NULL,
   `AgencyCaption` varchar(500) NOT NULL,
   `AgencyDescription` varchar(5000) NOT NULL,
-  `AgencyFirstname` varchar(255) NOT NULL,
-  `AgencyLastname` varchar(255) NOT NULL,
-  `AgencyPosition` varchar(255) NOT NULL,
   `AgencyContactNumber` varchar(5000) NOT NULL,
+  `AgencyLocation` varchar(1000) NOT NULL,
   `AgencyStatus` varchar(255) NOT NULL,
   `AgencyImage` varchar(1000) NOT NULL,
-  PRIMARY KEY (`AgencyID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+  `AgencyMain` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `tblagency`
 --
 
-INSERT INTO `tblagency` (`AgencyID`, `AgencyCaption`, `AgencyDescription`, `AgencyFirstname`, `AgencyLastname`, `AgencyPosition`, `AgencyContactNumber`, `AgencyStatus`, `AgencyImage`) VALUES
-(1, 'Bureau of Fire Protection-Manila Chapter', 'Bureau of Fire Protection-Manila Chapter Description', 'Julie Ann', 'Tarrobago', 'Social Worker', '421-1918,913-2786,09355062962', 'Active', ''),
-(2, 'DSWD-Main', 'DSWD-Main Description', 'Julie Ann', 'Tarrobago', 'Social Worker', '57435834534', 'Active', 'http://alerrt.x10.mx\n/ALERRT/mobile_app/images/agencies/dswd.png'),
-(3, 'Manila Water', 'Manila Water Description', 'Julie Ann', 'Tarrobago', 'Social Worker', '654645645', 'Active', ''),
-(4, 'NDRRMC-NCR', 'NDRRMC-NCR Description', 'Julie Ann', 'Tarrobago', 'Social Worker', '53453453', 'Active', '');
+INSERT INTO `tblagency` (`AgencyID`, `AgencyCaption`, `AgencyDescription`, `AgencyContactNumber`, `AgencyLocation`, `AgencyStatus`, `AgencyImage`, `AgencyMain`) VALUES
+(1, 'Bureau of Fire Protection-Manila Chapter', 'Description 1', '421-1918,913-2786,09355062962', '', 'Active', '', ''),
+(2, 'DSWD-Main', 'Description 2', '57435834534', '', 'Active', '', ''),
+(3, 'Manila Water', 'Description 3', '654645645', '', 'Active', '', ''),
+(4, 'NDRRMC-NCR', 'Description 4', '53453453', '', 'Active', '', ''),
+(5, 'DSWD 2', '', '4253453', '', 'Active', '', '2'),
+(6, 'Manila Water (Tondo Manila)', 'SAMPLE', 'SAMPLE', 'SAMPLE ADDRESS', 'Active', '', '3');
 
 -- --------------------------------------------------------
 
@@ -55,14 +57,21 @@ INSERT INTO `tblagency` (`AgencyID`, `AgencyCaption`, `AgencyDescription`, `Agen
 -- Table structure for table `tblcomments`
 --
 
-CREATE TABLE IF NOT EXISTS `tblcomments` (
-  `CommentID` int(255) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `tblcomments` (
+  `CommentID` int(255) NOT NULL,
   `PostID` varchar(255) NOT NULL,
   `CommentBy` varchar(1000) NOT NULL,
   `Comment` varchar(5000) NOT NULL,
-  `DateAndTimeCommented` varchar(1000) NOT NULL,
-  PRIMARY KEY (`CommentID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+  `DateAndTimeCommented` varchar(1000) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `tblcomments`
+--
+
+INSERT INTO `tblcomments` (`CommentID`, `PostID`, `CommentBy`, `Comment`, `DateAndTimeCommented`) VALUES
+(1, '4', '9acc07c3f382248122c419bdc7c45ce6', 'This is a comment from DSWD-Main..', 'January 20, 2019 | 6:30 PM'),
+(2, '4', '9acc07c3f382248122c419bdc7c45fa9', 'Thanks.', 'January 20, 2019 | 07:24 PM');
 
 -- --------------------------------------------------------
 
@@ -70,8 +79,8 @@ CREATE TABLE IF NOT EXISTS `tblcomments` (
 -- Table structure for table `tblposts`
 --
 
-CREATE TABLE IF NOT EXISTS `tblposts` (
-  `TopicID` int(255) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `tblposts` (
+  `TopicID` int(255) NOT NULL,
   `TopicTitle` varchar(255) NOT NULL,
   `TopicImage` varchar(1000) NOT NULL,
   `TopicLocationID` varchar(1000) NOT NULL,
@@ -81,20 +90,18 @@ CREATE TABLE IF NOT EXISTS `tblposts` (
   `TopicStatus` varchar(1000) NOT NULL,
   `TopicPostedBy` varchar(1000) NOT NULL,
   `TopicDateAndTimePosted` varchar(255) NOT NULL,
-  PRIMARY KEY (`TopicID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
+  `PosterLocationIPAddress` varchar(500) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `tblposts`
 --
 
-INSERT INTO `tblposts` (`TopicID`, `TopicTitle`, `TopicImage`, `TopicLocationID`, `TopicLocationName`, `TopicLocationAddress`, `TopicAgencyID`, `TopicStatus`, `TopicPostedBy`, `TopicDateAndTimePosted`) VALUES
-(1, 'hoy te', '', '', '', '', '4', 'Pending', '9acc07c3f382248122c419bdc7c45ga3', 'January 26, 2019 | 03:12 PM'),
-(2, 'hoy te', '', '', '', '', '4', 'Pending', '9acc07c3f382248122c419bdc7c45ga3', 'January 26, 2019 | 03:12 PM'),
-(3, 'hey', '', '', '', '', '3', 'Pending', '9acc07c3f382248122c419bdc7c45ga3', 'January 26, 2019 | 03:12 PM'),
-(4, 'hey', 'http://alerrt.x10.mx/ALERRT/mobile_app/images/posts/aa2713fc1c64c8e47635554b81dddf55.jpg', 'ChIJVbzr0RjKlzMRdxIRlVwyF9A', 'Universidad De Manila', 'Address: \n659-A Cecilia MuÃ±oz St, Ermita, Manila, 1000 Metro Manila, Philippines\n', '1', 'Pending', '9acc07c3f382248122c419bdc7c45ga3', 'January 26, 2019 | 03:13 PM'),
-(5, 'hey', 'http://alerrt.x10.mx/ALERRT/mobile_app/images/posts/231067ca8418248a58b424954e038d76.jpg', 'ChIJVbzr0RjKlzMRdxIRlVwyF9A', 'Universidad De Manila', 'Address: \n659-A Cecilia MuÃ±oz St, Ermita, Manila, 1000 Metro Manila, Philippines\n', '1', 'Pending', '9acc07c3f382248122c419bdc7c45ga3', 'January 26, 2019 | 03:13 PM'),
-(6, 'hey', 'http://alerrt.x10.mx/ALERRT/mobile_app/images/posts/43ded59be043447c516f902232866961.jpg', 'ChIJVbzr0RjKlzMRdxIRlVwyF9A', 'Universidad De Manila', 'Address: \n659-A Cecilia MuÃ±oz St, Ermita, Manila, 1000 Metro Manila, Philippines\n', '1', 'Pending', '9acc07c3f382248122c419bdc7c45ga3', 'January 26, 2019 | 03:14 PM');
+INSERT INTO `tblposts` (`TopicID`, `TopicTitle`, `TopicImage`, `TopicLocationID`, `TopicLocationName`, `TopicLocationAddress`, `TopicAgencyID`, `TopicStatus`, `TopicPostedBy`, `TopicDateAndTimePosted`, `PosterLocationIPAddress`) VALUES
+(1, 'Bureau of Fire Protection-Manila Chapter Report', '', '', '', '', '1', 'Resolved', '9acc07c3f382248122c419bdc7c45fa9', 'January 16, 2019 | 6:30 PM', '119.95.178.226'),
+(2, 'DSWD-Main Report', '', 'ChIJ5U9TnBvJlzMRa7YU0wZ4ilA', 'SM Makati', 'Address: \nSM Makati, EDSA, Makati, 1224 Metro Manila, Philippines\n', '4', 'Pending', '9acc07c3f382248122c419bdc7c45fa9', 'January 17, 2019 | 6:30 PM', ''),
+(4, 'Manila Water REPORT', 'http://192.168.1.7/ALERRT/mobile_app/images/posts/9acc07c3f382248122c419bdc7c45fa9.jpg', 'ChIJk_fLJCnKlzMRNf-iIl4ExBk', 'Robinsons Manila', 'Address: \nErmita, Manila, 1000 Metro Manila, Philippines\n', '3', 'Pending', '9acc07c3f382248122c419bdc7c45fa9', 'January 18, 2019 | 6:30 PM', ''),
+(5, 'NDRRMC-NCR REPORT', 'http://192.168.1.7/ALERRT/mobile_app/images/posts/6f6edff9a143e7e1a4af6ebe4e08653e.jpg', 'ChIJe32F-nnSlzMRkY4ySh4BqGU', 'SM City Bacoor', 'Address: \nBacoor, Cavite, Philippines\n', '4', 'Resolved', '9acc07c3f382248122c419bdc7c45fa9', 'January 19, 2019 | 6:30 PM', '');
 
 -- --------------------------------------------------------
 
@@ -102,14 +109,21 @@ INSERT INTO `tblposts` (`TopicID`, `TopicTitle`, `TopicImage`, `TopicLocationID`
 -- Table structure for table `tblstatus`
 --
 
-CREATE TABLE IF NOT EXISTS `tblstatus` (
-  `StatusID` int(255) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `tblstatus` (
+  `StatusID` int(255) NOT NULL,
   `StatusPostID` varchar(255) NOT NULL,
   `StatusType` varchar(500) NOT NULL,
   `StatusBy` varchar(255) NOT NULL,
-  `StatusDateAndTime` varchar(1000) NOT NULL,
-  PRIMARY KEY (`StatusID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+  `StatusDateAndTime` varchar(1000) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `tblstatus`
+--
+
+INSERT INTO `tblstatus` (`StatusID`, `StatusPostID`, `StatusType`, `StatusBy`, `StatusDateAndTime`) VALUES
+(1, '4', 'Ongoing', '9acc07c3f382248122c419bdc7c45ce6', 'January 20, 2019 | 6:45 PM'),
+(2, '2', 'Reassigned', '9acc07c3f382248122c419bdc7c45ce6', 'January 28, 2019 | 09:24 PM');
 
 -- --------------------------------------------------------
 
@@ -117,8 +131,8 @@ CREATE TABLE IF NOT EXISTS `tblstatus` (
 -- Table structure for table `tblusers`
 --
 
-CREATE TABLE IF NOT EXISTS `tblusers` (
-  `ID` int(255) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `tblusers` (
+  `ID` int(255) NOT NULL,
   `UserID` varchar(1000) NOT NULL,
   `Fullname` varchar(500) NOT NULL,
   `Email` varchar(255) NOT NULL,
@@ -126,30 +140,93 @@ CREATE TABLE IF NOT EXISTS `tblusers` (
   `Gender` varchar(255) NOT NULL,
   `Password` varchar(255) NOT NULL,
   `DateAndTimeRegistered` varchar(255) NOT NULL,
-  `Address` varchar(1000) NOT NULL,
   `Birthdate` varchar(255) NOT NULL,
   `UserRole` varchar(255) NOT NULL,
   `ProfilePicture` varchar(1000) NOT NULL,
   `Agency` varchar(255) NOT NULL,
   `UserStatus` varchar(255) NOT NULL,
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=11 ;
+  `LatLong` varchar(1000) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `tblusers`
 --
 
-INSERT INTO `tblusers` (`ID`, `UserID`, `Fullname`, `Email`, `MobileNumber`, `Gender`, `Password`, `DateAndTimeRegistered`, `Address`, `Birthdate`, `UserRole`, `ProfilePicture`, `Agency`, `UserStatus`) VALUES
-(1, '9acc07c3f382248122c419bdc7c45ga1', 'ALERRT', 'alerrt@gmail.com', '09582475548', 'Male', 'alerrt123', 'January 01, 2019 | 04:14 PM', 'Manila, Philippines', '02/22/1999', 'SUPER_ADMIN', '', '', 'Approved'),
-(2, '9acc07c3f382248122c419bdc7c45ga2', 'Arianne Sora', 'ariannesora@gmail.com', '09070536821', 'Female', 'ajcs1499', 'January 05, 2019 | 06:58 PM', '208 Quezon St Tondo Manila', '03/14/1999', 'USER', '', '', 'Approved'),
-(3, '9acc07c3f382248122c419bdc7c45ga3', 'Jemaica Malasaga', 'jemaicamalasaga@yahoo.com', '09387726692', 'Female', 'jemaica18', 'January 06, 2019 | 12:13 AM', 'Manila', '09/29/1996', 'USER', '', '', 'Approved'),
-(4, '9acc07c3f382248122c419bdc7c45ga4', 'Marideth', 'maridethbhernandez@gmail.com', '09754906502', 'Female', '112396maridetH', 'January 06, 2019 | 12:16 AM', 'Sta.Ana, Manila', '11/23/1996', 'USER', '', '', 'Approved'),
-(5, '9acc07c3f382248122c419bdc7c45ga5', 'watch Me', 'luke31997@gmail.com', '09282423187', 'Female', '112396', 'January 06, 2019 | 12:20 AM', 'Sta.ana', '11/23/1996', 'USER', '', '', 'Approved'),
-(6, '9acc07c3f382248122c419bdc7c45ga6', 'Lala', 'mama@gmail.com', '09266322495', 'Female', '112396', 'January 06, 2019 | 12:22 AM', 'Sta. Ana Manila', '11/23/1996', 'USER', '', '', 'Approved'),
-(7, '9acc07c3f382248122c419bdc7c45ga7', 'Mamamo', 'mamamo@gmail.com', '099754906502', 'Female', 'mamamo123', 'January 08, 2019 | 01:17 AM', 'Manila', '11/23/1996', 'USER', '', '', 'Approved'),
-(8, '9acc07c3f382248122c419bdc7c45ga8', 'Jomari', 'osurejiramoj22@gmail.com', '09958239884', 'Male', 'hahahaha', 'January 11, 2019 | 08:15 AM', '888 CP Garcia', '8/22/1998', 'USER', '', '', 'Approved'),
-(9, '9acc07c3f382248122c419bdc7c45ga9', 'John Paul Sibug', 'jhsibug@live.com', '09176666666', 'Male', '1234', 'January 12, 2019 | 03:24 PM', '1234', '06/24/1988', 'USER', '', '', 'Approved'),
-(10, '9bpg07c3f382248122c419bdc7c45ce6', 'DSWD-Main User', 'dswd@gmail.com', '09582475548', '', 'dswd123', 'January 20, 2019 | 5:30 PM', 'Manila, Philippines', '', 'ADMIN', 'http://alerrt.x10.mx/ALERRT/mobile_app/images/agencies/dswd.png', '2', 'Approved');
+INSERT INTO `tblusers` (`ID`, `UserID`, `Fullname`, `Email`, `MobileNumber`, `Gender`, `Password`, `DateAndTimeRegistered`, `Birthdate`, `UserRole`, `ProfilePicture`, `Agency`, `UserStatus`, `LatLong`) VALUES
+(1, '9acc07c3f382248122c419bdc7c45fa9', 'Tristan Rosales', 'tristanrosales0@gmail.com', '09979859471', 'Male', 'tan123', 'October 29, 2018 | 10:15 PM', '02/22/1999', 'USER', '', '', 'Disapproved', '14.5955,120.9721'),
+(2, '9acc07c3f382248122c419bdc7c45ga8', 'ALERRT', 'alerrt@gmail.com', '09582475548', 'Male', 'alerrt123', 'January 01, 2019 | 04:14 PM', '02/22/1999', 'SUPER_ADMIN', '', '', 'Approved', '14.5955,120.9721'),
+(3, '9acc07c3f382248122c419bdc7c45ce6', 'DSWD-Main User', 'dswd@gmail.com', '09582475548', '', 'dswd123', 'January 17, 2019 | 08:30 PM', '', 'ADMIN', '', '2', 'Approved', '14.537752, 121.001381'),
+(4, '1b625fbe91a54f8fd6207a900cf1be88', 'Manila Water User', 'manila.water@gmail.com', '09987659986', '', 'mw123', 'January 27, 2019 | 07:32 PM', '', 'ADMIN', '', '3', 'Approved', '14.5955,120.9721'),
+(5, '1b625fbe91a54f8fd6207a900cf1be90', 'Manila Water Backup User', 'mw_backup@gmail.com', '54353452', '', 'mw12', 'January 28, 2019 | 07:32 PM', '', 'ADMIN', '', '6', 'Approved', '14.5955,120.9721');
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `tblagency`
+--
+ALTER TABLE `tblagency`
+  ADD PRIMARY KEY (`AgencyID`);
+
+--
+-- Indexes for table `tblcomments`
+--
+ALTER TABLE `tblcomments`
+  ADD PRIMARY KEY (`CommentID`);
+
+--
+-- Indexes for table `tblposts`
+--
+ALTER TABLE `tblposts`
+  ADD PRIMARY KEY (`TopicID`);
+
+--
+-- Indexes for table `tblstatus`
+--
+ALTER TABLE `tblstatus`
+  ADD PRIMARY KEY (`StatusID`);
+
+--
+-- Indexes for table `tblusers`
+--
+ALTER TABLE `tblusers`
+  ADD PRIMARY KEY (`ID`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `tblagency`
+--
+ALTER TABLE `tblagency`
+  MODIFY `AgencyID` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT for table `tblcomments`
+--
+ALTER TABLE `tblcomments`
+  MODIFY `CommentID` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `tblposts`
+--
+ALTER TABLE `tblposts`
+  MODIFY `TopicID` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `tblstatus`
+--
+ALTER TABLE `tblstatus`
+  MODIFY `StatusID` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `tblusers`
+--
+ALTER TABLE `tblusers`
+  MODIFY `ID` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
