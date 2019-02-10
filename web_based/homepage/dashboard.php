@@ -205,11 +205,15 @@ if($session_role == "ADMIN"){
                         <th>Topic Title</th>
                         <th>Topic Status</th>
                         <th>Status By</th>
+                        <th>Reported By</th>
                         <th>Date And Time</th>
                       </thead>
                       <tbody>
                         <?php 
-                          $records = mysqli_query($con,"SELECT B.TopicTitle,A.StatusType,C.Fullname,A.StatusDateAndTime FROM tblstatus A LEFT JOIN tblposts B ON A.StatusPostID=B.TopicID LEFT JOIN tblusers C ON A.StatusBy=C.UserID") OR die("Query fail: " . mysqli_error());
+                          $records = mysqli_query($con,"SELECT B.TopicTitle,A.StatusType,C.Fullname as TopicUpdatedBy,D.Fullname as TopicReportedBy, A.StatusDateAndTime FROM tblstatus A 
+								LEFT JOIN tblposts B ON A.StatusPostID=B.TopicID 
+								LEFT JOIN tblusers C ON A.StatusBy=C.UserID
+								LEFT JOIN tblusers D ON B.TopicPostedBy=D.UserID") OR die("Query fail: " . mysqli_error());
 
                             $users = array();
                             while ($user =  mysqli_fetch_assoc($records))
@@ -222,7 +226,8 @@ if($session_role == "ADMIN"){
                             <tr>
                                 <td><?php echo $user['TopicTitle']; ?></td>
                                 <td><?php echo $user['StatusType']; ?></td>
-                                <td><?php echo $user['Fullname']; ?></td>
+                                <td><?php echo $user['TopicUpdatedBy']; ?></td>
+                                <td><?php echo $user['TopicReportedBy']; ?></td>
                                 <td><?php echo $user['StatusDateAndTime']; ?></td>
                             </tr>
                         <?php
