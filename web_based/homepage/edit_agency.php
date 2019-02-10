@@ -2,10 +2,27 @@
 include('../database.php');
 include('../session.php'); 
 
-$result=mysqli_query($con, "SELECT * FROM tblusers WHERE ID='$session_id'") or die('Error In Session. Please try again!');
-$row=mysqli_fetch_array($result);
+$agencyID = isset($_GET['agencyID']);
+$agencyCaption = '';
+$agencyDescription = '';
+$agencyContactNumber = '';
+$agencyAddress = '';
+$agencyStatus = '';
 
-$agencyCaption = "";
+$result=mysqli_query($con, "SELECT * FROM tblagency WHERE AgencyID='$agencyID'") or die("ERROR!");
+$numrows=mysqli_num_rows($result);
+
+
+
+if($numrows > 0){
+	while($row = mysqli_fetch_assoc($result)){
+		$agencyCaption = $row['AgencyCaption'];
+		$agencyDescription = $row['AgencyDescription'];
+		$agencyContactNumber = $row['AgencyContactNumber'];
+		$agencyAddress = $row['AgencyLocation'];
+		$agencyStatus = $row['AgencyStatus'];
+	}
+}
 
 ?>
 <!DOCTYPE html>
@@ -17,13 +34,7 @@ $agencyCaption = "";
   <link rel="icon" type="image/png" href="assets/img/logo.png">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
   <title>
-  	<?php 
-		if($session_role == "SUPER_ADMIN"){
-			echo "Registered Agencies | ALERRT";
-		}else if($session_role == "ADMIN"){
-			echo "Registered Sub-Agencies | ALERRT";
-		}
-	?>
+    Edit Agency | ALERRT
   </title>
   <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
   <!--     Fonts and icons     -->
@@ -55,90 +66,6 @@ $agencyCaption = "";
         
       </div>
     </div>
-
-  	<!-- Modal -->
-  	<div class="modal fade" id="btnAddAgency" role="dialog">
-	    <div class="modal-dialog modal-lg">
-	    
-	      <!-- Modal content-->
-	      <div class="modal-content">
-	      	<form method="POST" action="../addAgency.php">
-		        <div class="modal-body">
-		        	<h4><strong>
-		        	<?php 
-    						if($session_role == "SUPER_ADMIN"){
-    							echo "Add Agency";
-    						}else if($session_role == "ADMIN"){
-    							echo "Add Sub-Agency";
-    						}
-    					?>	
-					</strong></h4>
-
-					<hr width="100%">
-		          
-	                <div class="row">
-	                  <div class="col-md-12">
-	                    <div class="form-group">
-	                      <label class="bmd-label-floating">Agency Name</label>
-	                      <input type="text" class="form-control" name="agency_name" required maxlength="50">
-	                    </div>
-	                  </div>
-
-                    <div class="col-md-12">
-                      <div class="form-group">
-                        <label class="bmd-label-floating">Agency Description</label>
-                        <textarea cols=50 rows=5 class="form-control" name="agency_description" required maxlength="1000"></textarea>
-                      </div>
-                    </div>
-
-	                  <div class="col-md-12">
-	                    <div class="form-group">
-	                      <label class="bmd-label-floating">Agency Contact Number</label>
-	                      <input type="text" class="form-control" name="agency_contact_number" required>
-	                    </div>
-	                  </div>
-
-                    <div class="col-md-12">
-                      <div class="form-group">
-                        <label class="bmd-label-floating">Agency Address</label>
-                        <textarea cols=50 rows=5 class="form-control" name="agency_address" required maxlength="500"></textarea>
-                      </div>
-                    </div>
-
-	                  <div class="col-md-12">
-	                    <div class="form-group">
-	                      <select class="form-control" name="agency_status" required>
-	                      	<option value="----CHOOSE STATUS----" disabled selected>----CHOOSE STATUS----</option>
-	                      	<option value="Active">Active</option>
-	                      	<option value="Inactive">Inactive</option>
-	                      </select>
-	                    </div>
-	                  </div>
-
-	                </div>
-	   
-	                
-	                <div class="clearfix"></div>
-	              
-		        </div>
-
-		        <div class="modal-footer">
-		        	<button type="submit" class="btn btn-warning pull-right">
-              <?php 
-                if($session_role == "SUPER_ADMIN"){
-                  echo "Add Agency";
-                }else if($session_role == "ADMIN"){
-                  echo "Add Sub-Agency";
-                }
-              ?>
-              </button>
-		          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-		        </div>
-	        </form>
-	      </div>
-	      
-	    </div>
-  	</div>
 
     <div class="sidebar" data-color="orange" data-background-color="white" data-image="assets/img/sidebar-1.jpg">
       <!--
@@ -190,7 +117,7 @@ $agencyCaption = "";
                 '</a>' .
               '</li>' .
 
-              '<li class="nav-item ">' .
+              '<li class="nav-item">' .
                 '<a class="nav-link" href="users.php">' .
                   '<i class="material-icons">person</i>' .
                   '<p>Users</p>' .
@@ -220,15 +147,18 @@ $agencyCaption = "";
       <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
         <div class="container-fluid">
           <div class="navbar-wrapper">
-          	<button type="button" class="btn btn-warning pull-right" data-toggle="modal" data-target="#btnAddAgency"> <i class="material-icons">create</i>
-          	<?php 
-				if($session_role == "SUPER_ADMIN"){
-					echo "Add Agency";
-				}else if($session_role == "ADMIN"){
-					echo "Add Sub-Agency";
-				}
-			?>
-			</button>
+          	<h2>
+          		<strong>
+		        	<?php 
+						if($session_role == "SUPER_ADMIN"){
+							echo "Edit Agency";
+						}else if($session_role == "ADMIN"){
+							echo "Edit Sub-Agency";
+						}
+					?>
+				</strong>
+			</h2>
+
           </div>
         </div>
       </nav>
@@ -237,83 +167,73 @@ $agencyCaption = "";
         <div class="container-fluid">
           <div class="row" style="margin-left: auto; margin-right: auto;">
             <div class="col-md-12">
-              <div class="card">
-                <div class="card-header card-header-warning">
-                  	<h4 class="card-title ">
-	                  	<?php 
-	                  		if($session_role == "SUPER_ADMIN"){
-	                  			echo "Registered Agencies";
-	                  		}else if($session_role == "ADMIN"){
-	                  			echo "Registered Sub-Agencies";
-	                  		}
-	                    ?>	
-                	</h4>
-                </div>
-                <div class="card-body">
-                  <div class="table-responsive">
-                    <table class="table">
-                      <thead class=" text-primary">
-                        <th>Agency Name</th>
-                        <th>Agency Description</th>
-                        <th>Agency Contact Number</th>
-                        <th>Agency Location</th>
-                        <th>Action</th>
-                      </thead>
-                      <tbody>
-                      	<?php 
-                      		if($session_role == "SUPER_ADMIN"){
-                      			$records = mysqli_query($con,"SELECT * FROM tblagency WHERE AgencyMain = '' ORDER BY AgencyCaption ASC") OR die("Query fail: " . mysqli_error());
-                      		}else if($session_role == "ADMIN"){
-                      			$records = mysqli_query($con,"SELECT * FROM tblagency WHERE AgencyMain != '' ORDER BY AgencyCaption ASC") OR die("Query fail: " . mysqli_error());
-                      		}
+            	<form method="POST" action="../updateAgency.php?agencyID=<?php echo $agencyID; ?>">
+			        <div class="modal-body">          
+		                <div class="row">
+		                  <div class="col-md-12">
+		                    <div class="form-group">
+		                      <label class="bmd-label-floating">Agency Name</label>
+		                      <input type="text" class="form-control" name="agency_name" value="<?php echo $agencyCaption; ?>" required maxlength="50">
+		                    </div>
+		                  </div>
 
-            						    $projects = array();
-            						    while ($project =  mysqli_fetch_assoc($records))
-            						    {
-            						        $projects[] = $project;
-            						    }
-            						    foreach ($projects as $project)
-            						    {
-            						?>
-            						    <tr>
-            						        <td><?php echo $project['AgencyCaption']; ?></td>
-                                <td>
-                                  <?php 
-                                    if($project['AgencyDescription'] == ""){
-                                      echo "No description yet!";
-                                    }else{
-                                      echo $project['AgencyDescription'];
-                                    }
-                                  ?>
-                                </td>
-            						        <td><?php echo str_replace(",", "<br>", $project['AgencyContactNumber']); ?></td>
-                                <td>
-                                  <?php 
-                                    if($project['AgencyLocation'] == ""){
-                                      echo "No location yet!";
-                                    }else{
-                                      echo $project['AgencyLocation'];
-                                    }
-                                  ?>
-                                </td>
-                                <td>
-                                  <?php
-                                    if($session_role == "SUPER_ADMIN"){
-                                      echo '<a href="edit_agency.php?agencyID=' . $project['AgencyID'] . '" style="color: white;"><button type="button" class="btn btn-warning pull-left"> <i class="material-icons">edit</i> Edit Agency</button></a>';
-                                    }else{
-                                      echo "<strong>Access Denied!</strong>";
-                                    }
-                                  ?>
-                                </td>
-            						    </tr>
-            						<?php
-            						    }
-            						?>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
+	                    <div class="col-md-12">
+	                      <div class="form-group">
+	                        <label class="bmd-label-floating">Agency Description</label>
+	                        <textarea cols=50 rows=5 class="form-control" name="agency_description" required maxlength="1000"><?php echo $agencyDescription; ?></textarea>
+	                      </div>
+	                    </div>
+
+		                  <div class="col-md-12">
+		                    <div class="form-group">
+		                      <label class="bmd-label-floating">Agency Contact Number</label>
+		                      <input type="text" class="form-control" name="agency_contact_number" value="<?php echo $agencyContactNumber; ?>" required>
+		                    </div>
+		                  </div>
+
+	                    <div class="col-md-12">
+	                      <div class="form-group">
+	                        <label class="bmd-label-floating">Agency Address</label>
+	                        <textarea cols=50 rows=5 class="form-control" name="agency_address" required maxlength="500"><?php echo $agencyAddress; ?></textarea>
+	                      </div>
+	                    </div>
+
+		                  <div class="col-md-12">
+		                    <div class="form-group">
+		                      <select class="form-control" name="agency_status" required>
+		                      	<option value="----CHOOSE STATUS----" disabled selected>----CHOOSE STATUS----</option>
+		                      	<?php
+		                      	if($agencyStatus == "Active"){
+		                      		echo '<option value="Active" selected>Active</option>' .
+		                      			'<option value="Inactive">Inactive</option>';
+		                      	}else{
+		                      		echo '<option value="Active">Active</option>' .
+		                      			'<option value="Inactive" selected>Inactive</option>';
+		                      	}
+		                      	?>
+		                      </select>
+		                    </div>
+		                  </div>
+
+		                </div>
+		   
+		                
+		                <div class="clearfix"></div>
+		              
+			        </div>
+
+			        <div class="modal-footer">
+			        	<button type="submit" class="btn btn-warning pull-right">
+			              <?php 
+			                if($session_role == "SUPER_ADMIN"){
+			                  echo "Update Agency";
+			                }else if($session_role == "ADMIN"){
+			                  echo "Update Sub-Agency";
+			                }
+			              ?>
+			              </button>
+			        </div>
+		        </form>
             </div>
 
           </div>
