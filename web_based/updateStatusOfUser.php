@@ -5,7 +5,7 @@ updateStatusOfUser();
 
 function updateStatusOfUser(){
 	global $con;
-
+	
 	$userID = $_GET['userID'];
 	$status = $_GET['status'];
 

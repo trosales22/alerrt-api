@@ -42,6 +42,10 @@ function registerUser(){
 			VALUES (?,?,?,?,?,?,?,?,?,?,?)";
 
 			$stmt = mysqli_prepare($con,$query);
+			
+			if($stmt === FALSE){
+				die(mysqli_error($con));
+			}
 
 			mysqli_stmt_bind_param($stmt,"sssssssssss",$id,$fullname,$email,$mobileNumber,$gender,$password,$dateAndTimeRegistered,$birthdate,$userRole,$latLong,$userStatus);
 

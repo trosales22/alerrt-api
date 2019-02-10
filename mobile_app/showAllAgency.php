@@ -12,7 +12,7 @@ if($_SERVER["REQUEST_METHOD"] == "GET"){
 function showAllAgency(){
 	global $con;
 	
-	$query="SELECT * FROM tblagency ORDER BY AgencyID DESC";
+	$query="SELECT * FROM tblagency WHERE AgencyMain='' ORDER BY AgencyID DESC";
 	$result = mysqli_query($con,$query);
 
 	$numrows=mysqli_num_rows($result);

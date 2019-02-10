@@ -117,7 +117,7 @@ function getAddressOfUserByLatLong($latLong){
 
 	                  <div class="col-md-12">
 	                    <div class="form-group">
-	                      <label class="bmd-label-floating">Address</label>
+	                      <label class="bmd-label-floating">Address (Format: Latitude,Longitude | ex. 14.5955,120.9721)</label>
 	                      <input type="text" class="form-control" name="user_address" required maxlength="100">
 	                    </div>
 	                  </div>

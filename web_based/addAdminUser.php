@@ -21,9 +21,13 @@ function registerUser(){
     $numrows=mysqli_num_rows($queryToDetectIfExisting);
 
     if($numrows==0){
-		$query = "INSERT INTO tblusers(UserID,Fullname,Email,MobileNumber,Password,Address,UserRole,DateAndTimeRegistered,Agency,UserStatus) VALUES (?,?,?,?,?,?,?,?,?,?)";
+		$query = "INSERT INTO tblusers(UserID,Fullname,Email,MobileNumber,Password,LatLong,UserRole,DateAndTimeRegistered,Agency,UserStatus) VALUES (?,?,?,?,?,?,?,?,?,?)";
 
 		$stmt = mysqli_prepare($con,$query);
+
+		if($stmt === FALSE){
+			die(mysqli_error($con));
+		}
 
 		mysqli_stmt_bind_param($stmt,"ssssssssss",$id,$fullname,$email,$contactNumber,$password,$address,$userRole,$dateAndTimeAdded,$agency,$userStatus);
 

@@ -8,9 +8,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
 function addPost(){
 	global $con;
-	global $appUrl;
 
-	$actualPath = '';
+	$path = '';
+	$topicSeverity = $_POST['topicSeverity'];
 	$topicTitle = $_POST['topicTitle'];
 
 	if($_POST['topicImage'] != null){
@@ -22,11 +22,6 @@ function addPost(){
 	$topicLocationID = $_POST['topicLocationID'];
 	$topicLocationName = $_POST['topicLocationName'];
 	$topicLocationAddress = $_POST['topicLocationAddress'];
-
-	if($topicLocationID == "" || $topicLocationName == "" || $topicLocationAddress == ""){
-		$topicPosterIpAddress = $_SERVER['REMOTE_ADDR'];
-	}
-
 	$topicAgencyID = $_POST['topicAgencyID'];
 	$topicStatus = 'Pending';
 	$topicPostedBy = $_POST['topicPostedBy'];
@@ -36,28 +31,29 @@ function addPost(){
 
 	if($topicImage != null){
 		$path = "images/posts/$id.jpg";
-
-		$actualPath = $appUrl . "images/posts/$id.jpg";
-
 		$file = fopen($path, 'wb');
 
 		$isWritten = fwrite($file, $topicImage);
 		fclose($file);
 	}
 
-	$query = "INSERT INTO tblposts(TopicTitle,TopicImage,TopicLocationID,TopicLocationName,TopicLocationAddress,TopicAgencyID,TopicStatus,TopicPostedBy,TopicDateAndTimePosted,PosterLocationIPAddress) 
+	$query = "INSERT INTO tblposts(TopicSeverity,TopicTitle,TopicImage,TopicLocationID,TopicLocationName,TopicLocationAddress,TopicAgencyID,TopicStatus,TopicPostedBy,TopicDateAndTimePosted) 
 		VALUES (?,?,?,?,?,?,?,?,?,?)";
 
 	$stmt = mysqli_prepare($con,$query);
 
-	mysqli_stmt_bind_param($stmt,"ssssssssss",$topicTitle,$actualPath,$topicLocationID,$topicLocationName,$topicLocationAddress,$topicAgencyID,$topicStatus,$topicPostedBy,$topicDateAndTimePosted,$topicPosterIpAddress);
+	if($stmt === FALSE){
+		die(mysqli_error($con));
+	}
+
+	mysqli_stmt_bind_param($stmt,"ssssssssss",$topicSeverity,$topicTitle,$path,$topicLocationID,$topicLocationName,$topicLocationAddress,$topicAgencyID,$topicStatus,$topicPostedBy,$topicDateAndTimePosted);
 
 	mysqli_stmt_execute($stmt);
 
 	$check = mysqli_stmt_affected_rows($stmt);
 
 	if($check == 1){
-		echo "Topic posted successfully!";
+		echo "Topic posted successfully!";	
 	}else{
 		echo "Failed to post your topic!";
 	}

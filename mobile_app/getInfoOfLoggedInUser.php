@@ -1,5 +1,5 @@
 <?php
-if($_SERVER["REQUEST_METHOD"] == "POST"){
+if($_SERVER["REQUEST_METHOD"] == "GET"){
 	require 'database.php';
 	showInfoOfLoggedInUser();
 }else{
@@ -11,7 +11,7 @@ function showInfoOfLoggedInUser(){
 
 	$emailAddress = $_GET['emailAddress'];
 
-	$query="SELECT * FROM tblusers WHERE Email='$emailAddress'";
+	$query="SELECT UserID,Fullname,Email,MobileNumber,ProfilePicture FROM tblusers WHERE Email='$emailAddress'";
 	$result = mysqli_query($con,$query);
 
 	$numrows=mysqli_num_rows($result);
@@ -20,7 +20,6 @@ function showInfoOfLoggedInUser(){
 
 	if($numrows > 0){
 		while($row = mysqli_fetch_assoc($result)){
-			$row['UserID'] = $row['UserID'];
 			$listOfUsers[] = $row;
 		}
 

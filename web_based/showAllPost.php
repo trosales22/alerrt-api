@@ -1,19 +1,17 @@
 <?php
 	date_default_timezone_set("Asia/Manila");
-	showAllPost();
 
-	function showAllPost(){
+	function showAllPost($topicSeverity){
 		global $con;
+		global $appUrl;
 		global $session_id;
 		global $session_agency;
-
-		require_once('geoplugin.php');
-		$geoplugin = new geoPlugin();
+		global $appUrl;
 
 		if($session_agency == ''){
-			$query="SELECT posts.*,users.ProfilePicture AS TopicPostedBy_ProfilePicture, users.Fullname AS TopicPostedBy_Fullname, users.Email AS TopicPostedBy_Email FROM tblposts posts LEFT JOIN tblusers users ON posts.TopicPostedBy=users.UserID ORDER BY posts.TopicID DESC";
+			$query="SELECT posts.*,users.ProfilePicture AS TopicPostedBy_ProfilePicture, users.Fullname AS TopicPostedBy_Fullname, users.Email AS TopicPostedBy_Email, users.MobileNumber AS TopicPostedBy_MobileNumber, agency.AgencyCaption AS TopicAgencyCaption FROM tblposts posts LEFT JOIN tblusers users ON posts.TopicPostedBy=users.UserID LEFT JOIN tblagency agency ON posts.TopicAgencyID = agency.AgencyID WHERE posts.TopicSeverity='$topicSeverity' ORDER BY posts.TopicID DESC";
 		}else{
-			$query="SELECT posts.*,users.ProfilePicture AS TopicPostedBy_ProfilePicture, users.Fullname AS TopicPostedBy_Fullname, users.Email AS TopicPostedBy_Email FROM tblposts posts LEFT JOIN tblusers users ON posts.TopicPostedBy=users.UserID WHERE posts.TopicAgencyID='$session_agency' ORDER BY posts.TopicID DESC";
+			$query="SELECT posts.*,users.ProfilePicture AS TopicPostedBy_ProfilePicture, users.Fullname AS TopicPostedBy_Fullname, users.Email AS TopicPostedBy_Email, users.MobileNumber AS TopicPostedBy_MobileNumber, agency.AgencyCaption AS TopicAgencyCaption FROM tblposts posts LEFT JOIN tblusers users ON posts.TopicPostedBy=users.UserID LEFT JOIN tblagency agency ON posts.TopicAgencyID = agency.AgencyID WHERE posts.TopicAgencyID='$session_agency' AND posts.TopicSeverity='$topicSeverity' ORDER BY posts.TopicID DESC";
 		}
 		
 		$result = mysqli_query($con,$query);
@@ -29,10 +27,6 @@
 
 			while($row = mysqli_fetch_assoc($result)){
 				$postID = $row['TopicID'];
-				$geoplugin->locate($row['PosterLocationIPAddress']);
-
-				$city = $geoplugin->city;
-				$region = $geoplugin->region;
 
 				//comments
 				$queryComments="SELECT comments.*,users.ProfilePicture AS CommentBy_ProfilePicture, users.Fullname AS CommentBy_Fullname, users.Email AS CommentBy_Email FROM tblcomments comments LEFT JOIN tblusers users ON comments.CommentBy=users.UserID WHERE comments.PostID='$postID' ORDER BY comments.CommentID DESC";
@@ -75,7 +69,7 @@
 				if($row['TopicImage'] == ""){
 					$topicImageUrl = "assets/img/no-image-available.jpg";
 				}else{
-					$topicImageUrl = $row['TopicImage'];
+					$topicImageUrl = $appUrl . $row['TopicImage'];
 				}
 
 				if($row['TopicPostedBy_ProfilePicture'] == ""){
@@ -130,14 +124,10 @@
 				
 				$locationName;
 
-	            if($row['TopicLocationName'] == ""){
-	            	$locationName = $city . ', ' . $region;
+	            if($row['TopicLocationAddress'] == ""){
+	            	$locationName = "No selected location.";
 	            }else{
-	              	$locationName = $row['TopicLocationName'];
-	            }
-
-	            if($locationName == ""){
-	            	$locationName = "N/A";
+	              	$locationName = str_replace("Address: ","", $row['TopicLocationAddress']);
 	            }
 
 				$values .= 	'<div class="col-md-12" style="margin-bottom: 25px;">' .
@@ -148,8 +138,18 @@
 				                '</div>' .
 
 				                '<div class="media-body">' .
-				                  '<h4 class="media-heading">' . $row['TopicPostedBy_Fullname'] . '<br><span style="font-size: 15px;"><i style="vertical-align: middle;" class="material-icons">date_range</i> ' . $row['TopicDateAndTimePosted'] . '</span></h4>' . 
-				                  '<span style="vertical-align: middle;"><i style="vertical-align: middle;" class="material-icons">my_location</i> ' . $locationName . '</span>' .
+				                  '<h4 class="media-heading">' . $row['TopicPostedBy_Fullname'] . '</h4>' . 
+
+				                  '<span style="font-size: 15px;"><i style="vertical-align: middle;" class="material-icons">date_range</i> ' . $row['TopicDateAndTimePosted'] . '</span><br/>' . 
+
+				                  '<span style="vertical-align: middle;"><i style="vertical-align: middle;" class="material-icons">my_location</i> ' . $locationName . '</span><br/>' .
+
+				                  '<span style="font-size: 15px;"><i style="vertical-align: middle;" class="material-icons">account_balance</i> ' . $row['TopicAgencyCaption'] . '</span><br/>' . 
+
+				                  '<span style="font-size: 15px;"><i style="vertical-align: middle;" class="material-icons">phone</i> ' . $row['TopicPostedBy_MobileNumber'] . '</span><br/>' . 
+
+				                  '<span style="font-size: 15px;"><i style="vertical-align: middle;" class="material-icons">priority_high</i> ' . $row['TopicSeverity'] . '</span><br/>' . 
+
 				                  '<hr width="100%">' .
 				                  '<p>' .
 				                    '<b>Status: </b> ' . $row['TopicStatus'] . '<br>' .
@@ -158,7 +158,6 @@
 
 				                  '<hr width="100%">' .
 				                   $row['TopicTitle'] . '<br>' .
-				                   
 				                  
 				                  '<img src="' . $topicImageUrl .'" class="img-thumbnail" width="400" height="300" style="max-height: 300px; max-width: 400px;"><br><br>' .
 
@@ -198,6 +197,6 @@
 	                '</div>';
 		}
 
-		mysqli_close($con);
+		//mysqli_close($con);
 	}
 ?>

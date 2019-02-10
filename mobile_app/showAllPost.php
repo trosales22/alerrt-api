@@ -10,8 +10,11 @@ if($_SERVER["REQUEST_METHOD"] == "GET"){
 
 function showAllPost(){
 	global $con;
+	global $appUrl;
 
-	$query="SELECT * FROM tblposts ORDER BY TopicID DESC";
+	$loggedInUser = $_GET['loggedInUser'];
+
+	$query="SELECT A.*, B.AgencyCaption FROM tblposts A LEFT JOIN tblagency B ON A.TopicAgencyID = B.AgencyID WHERE A.TopicPostedBy='$loggedInUser' ORDER BY A.TopicID DESC";
 	$result = mysqli_query($con,$query);
 
 	$numrows=mysqli_num_rows($result);
@@ -22,12 +25,13 @@ function showAllPost(){
 		while($row = mysqli_fetch_assoc($result)){
 			$listOfPosts[$row['TopicID']] = [
 				'TopicID' => $row['TopicID'],
+				'TopicSeverity' => $row['TopicSeverity'],
 				'TopicTitle' => $row['TopicTitle'],
-				'TopicImage' => $row['TopicImage'],
+				'TopicImage' => $appUrl . $row['TopicImage'],
 				'TopicLocationID' => $row['TopicLocationID'],
 				'TopicLocationName' => $row['TopicLocationName'],
-				'TopicLocationAddress' => $row['TopicLocationAddress'],
-				'TopicAgencyID' => $row['TopicAgencyID'],
+				'TopicLocationAddress' => str_replace("Address: ","", $row['TopicLocationAddress']),
+				'TopicAgency' => $row['AgencyCaption'],
 				'TopicStatus' => $row['TopicStatus'],
 				'TopicPostedBy' => $row['TopicPostedBy'],
 				'TopicDateAndTimePosted' => $row['TopicDateAndTimePosted'],

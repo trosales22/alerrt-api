@@ -140,36 +140,103 @@ $row=mysqli_fetch_array($result);
       <div class="content">
         <div class="container-fluid">
           <div class="row" style="margin-left: auto; margin-right: auto;">
-          	<?php 
-          	global $session_id;
-          	include('../showAllPost.php'); 
-          	
-          	?>
-          	<!--
-            <div class="col-md-10">
-              <div class="media">
+            <style>
+              /* Style the tab */
+              .tab {
+                overflow: hidden;
+                border: 1px solid #ccc;
+                background-color: #f1f1f1;
+              }
 
-                <div class="media-left">
-                  <img src="assets/img/faces/marc.jpg" class="media-object" style="width:60px; padding-right: 10px;">
-                </div>
+              /* Style the buttons inside the tab */
+              .tab button {
+                background-color: inherit;
+                float: left;
+                border: none;
+                outline: none;
+                cursor: pointer;
+                padding: 14px 16px;
+                transition: 0.3s;
+                font-size: 17px;
+              }
 
-                <div class="media-body">
-                  <h4 class="media-heading">Jomari A. Rejuso<br><span style="font-size: 15px;">As of now</span></h4>
-                  <hr width="100%">
-                  <p>
-                    <b>Attention: </b> Fire Manila-Philippines, BFP-Manila Chapter<br>
-                    <b>Status: </b> Reported<br>
-                  </p>
-                  <hr width="100%">
-                  Fire hit a residential area and a portion of the University of Manila's College of Law in Sampaloc, Manila.<br>
-                  <img src="assets/img/cover.jpg" class="img-thumbnail" width="400" height="300"><br>
+              /* Change background color of buttons on hover */
+              .tab button:hover {
+                background-color: #ddd;
+              }
 
-                  <button type="button" class="btn btn-warning pull-right"> <i class="material-icons">visibility</i> View Comments</button>
-                </div>
-                
+              /* Create an active/current tablink class */
+              .tab button.active {
+                background-color: #ccc;
+              }
+
+              /* Style the tab content */
+              .tabcontent {
+                display: none;
+                padding: 6px 12px;
+                border: 1px solid #ccc;
+                border-top: none;
+              }
+            </style>
+
+            <script>
+              function openSeverityReport(evt, cityName) {
+                var i, tabcontent, tablinks;
+                tabcontent = document.getElementsByClassName("tabcontent");
+                for (i = 0; i < tabcontent.length; i++) {
+                  tabcontent[i].style.display = "none";
+                }
+                tablinks = document.getElementsByClassName("tablinks");
+                for (i = 0; i < tablinks.length; i++) {
+                  tablinks[i].className = tablinks[i].className.replace(" active", "");
+                }
+                document.getElementById(cityName).style.display = "block";
+                evt.currentTarget.className += " active";
+              }
+            </script>
+
+            <div class="col-md-12">
+              <strong>Choose Type of Severity to filter reports</strong>
+              <div class="tab">
+                <button class="tablinks" onclick="openSeverityReport(event, 'Critical')">Critical</button>
+                <button class="tablinks" onclick="openSeverityReport(event, 'Major')">Major</button>
+                <button class="tablinks" onclick="openSeverityReport(event, 'Moderate')">Moderate</button>
+                <button class="tablinks" onclick="openSeverityReport(event, 'Minor')">Minor</button>
+              </div>
+
+              <?php
+                global $con;
+                include('../showAllPost.php'); 
+              ?>
+
+              <div id="Critical" class="tabcontent" style="overflow-y: auto; max-height: 600px;">
+                <?php 
+                $topicSeverity = 'Critical';
+                showAllPost($topicSeverity);
+                ?>
+              </div>
+
+              <div id="Major" class="tabcontent" style="overflow-y: auto; max-height: 600px;">
+                <?php 
+                $topicSeverity = 'Major';
+                showAllPost($topicSeverity);
+                ?>
+              </div>
+
+              <div id="Moderate" class="tabcontent" style="overflow-y: auto; max-height: 600px;">
+                <?php 
+                $topicSeverity = 'Moderate';
+                showAllPost($topicSeverity);
+                ?>
+              </div>
+
+              <div id="Minor" class="tabcontent" style="overflow-y: auto; max-height: 600px;">
+                <?php 
+                $topicSeverity = 'Minor';
+                showAllPost($topicSeverity);
+                ?>
               </div>
             </div>
-        	-->
           </div>
         </div>
       </div>
