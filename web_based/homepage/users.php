@@ -54,6 +54,7 @@ function getAddressOfUserByLatLong($latLong){
   <link href="assets/css/material-dashboard.css?v=2.1.1" rel="stylesheet" />
   <!-- CSS Just for demo purpose, don't include it in your project -->
   <link href="assets/demo/demo.css" rel="stylesheet" />
+  <script src="https://smtpjs.com/v3/smtp.js"></script>
 </head>
 
 <body class="">
@@ -313,12 +314,42 @@ function getAddressOfUserByLatLong($latLong){
 			                                  ?>
 			                                </td>
 			                                <td><?php echo $user['UserStatus']; ?></td>
+			                                <script type="text/javascript">
+								            	function sendApprovedEmail(){
+								            		Email.send({
+													    SecureToken : "94e37ceb-d169-48f7-910c-444b4af145d8",
+													    To : "<?php echo $user['Email']; ?>",
+													    From : "alerrt01@gmail.com",
+													    Subject : "ALERRT | Approval Notification",
+													    Body : "You have been approved by the super administrator. You can now login your account in http://alerrt.x10.mx/ALERRT/web_based/login/index.php"
+													}).then(
+													  message => alert(message)
+													);
+								            	}
+
+								            	function sendDisapprovedEmail(){
+								            		Email.send({
+													    SecureToken : "94e37ceb-d169-48f7-910c-444b4af145d8",
+													    To : "<?php echo $user['Email']; ?>",
+													    From : "alerrt01@gmail.com",
+													    Subject : "ALERRT | Approval Notification",
+													    Body : "You have been disapproved by the super administrator."
+													}).then(
+													  message => alert(message)
+													);
+								            	}
+
+								            	//sendEmail();
+								            </script>
+
 			                                <td>
 			                                  <?php
                                           if($user['UserStatus'] == 'Disapproved'){
-                                              echo '<button type="button" class="btn btn-info pull-left"> <i class="material-icons">verified_user</i> <a href="../updateStatusOfUser.php?userID=' . $user['ID'] . '&status=Approved" style="color: white;">Approve</a></button>';
+                                              echo '<button type="button" class="btn btn-info pull-left"> <i class="material-icons">verified_user</i> <a href="../updateStatusOfUser.php?userID=' . $user['ID'] . '&status=Approved" style="color: white;">Approve</a></button>&nbsp;&nbsp;&nbsp;';
+                                              echo '<button type="button" class="btn btn-danger pull-left" onclick="sendApprovedEmail()"> <i class="material-icons">verified_user</i> <a style="color: white;" >Notify This User</a></button>';
                                             }else if($user['UserStatus'] == 'Approved'){
-                                              echo '<button type="button" class="btn btn-warning pull-left"> <i class="material-icons">block</i> <a href="../updateStatusOfUser.php?userID=' . $user['ID'] . '&status=Disapproved" style="color: white;">Disapprove</a></button>';
+                                              echo '<button type="button" class="btn btn-warning pull-left"> <i class="material-icons">block</i> <a href="../updateStatusOfUser.php?userID=' . $user['ID'] . '&status=Disapproved" style="color: white;">Disapprove</a></button>&nbsp;&nbsp;&nbsp;';
+                                              echo '<button type="button" class="btn btn-danger pull-left" onclick="sendDisapprovedEmail()"> <i class="material-icons">verified_user</i> <a style="color: white;" >Notify This User</a></button>';
                                             }
 			                                  ?>
 			                                </td>
@@ -332,6 +363,8 @@ function getAddressOfUserByLatLong($latLong){
                 </div>
               </div>
             </div>
+
+            
 
           </div>
         </div>
