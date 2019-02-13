@@ -210,10 +210,18 @@ if($session_role == "ADMIN"){
                       </thead>
                       <tbody>
                         <?php 
-                          $records = mysqli_query($con,"SELECT B.TopicTitle,A.StatusType,C.Fullname as TopicUpdatedBy,D.Fullname as TopicReportedBy, A.StatusDateAndTime FROM tblstatus A 
+							if($session_role == "SUPER_ADMIN"){
+								$records = mysqli_query($con,"SELECT B.TopicTitle,A.StatusType,C.Fullname as TopicUpdatedBy,D.Fullname as TopicReportedBy, A.StatusDateAndTime FROM tblstatus A 
 								LEFT JOIN tblposts B ON A.StatusPostID=B.TopicID 
 								LEFT JOIN tblusers C ON A.StatusBy=C.UserID
 								LEFT JOIN tblusers D ON B.TopicPostedBy=D.UserID") OR die("Query fail: " . mysqli_error());
+							}else if($session_role == "ADMIN"){
+								$records = mysqli_query($con,"SELECT B.TopicTitle,A.StatusType,C.Fullname as TopicUpdatedBy,D.Fullname as TopicReportedBy, A.StatusDateAndTime FROM tblstatus A 
+								LEFT JOIN tblposts B ON A.StatusPostID=B.TopicID 
+								LEFT JOIN tblusers C ON A.StatusBy=C.UserID
+								LEFT JOIN tblusers D ON B.TopicPostedBy=D.UserID 
+								WHERE B.TopicAgencyID=$session_agency") OR die("Query fail: " . mysqli_error());
+							}
 
                             $users = array();
                             while ($user =  mysqli_fetch_assoc($records))
