@@ -28,7 +28,8 @@ function showAllAgency(){
 				'AgencyContactNumber' => $row['AgencyContactNumber'],
 				'AgencyLocation' => $row['AgencyLocation'],
 				'AgencyStatus' => $row['AgencyStatus'],
-				'AgencyImage' => $row['AgencyImage']
+				'AgencyImage' => $row['AgencyImage'],
+				'AgencyAvailability' => $row['AgencyAvailability']
 			];
 		}
 

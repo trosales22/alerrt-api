@@ -12,17 +12,18 @@ function addAgency(){
 	$agencyContactNumber = $_POST['agency_contact_number'];
 	$agencyAddress = $_POST['agency_address'];
 	$agencyStatus = $_POST['agency_status'];
+	$agencyAvailability = $_POST['agency_availability'];
 
 	$queryToDetectIfExisting=mysqli_query($con,"SELECT * FROM tblagency WHERE AgencyCaption='$agencyName'");
     $numrows=mysqli_num_rows($queryToDetectIfExisting);
 
     if($numrows==0){
-		$query = "INSERT INTO tblagency(AgencyCaption,AgencyDescription,AgencyContactNumber,AgencyLocation,AgencyStatus,AgencyMain) 
-		VALUES (?,?,?,?,?,?)";
+		$query = "INSERT INTO tblagency(AgencyCaption,AgencyDescription,AgencyContactNumber,AgencyLocation,AgencyStatus,AgencyMain,AgencyAvailability) 
+		VALUES (?,?,?,?,?,?,?)";
 
 		$stmt = mysqli_prepare($con,$query);
 
-		mysqli_stmt_bind_param($stmt,"ssssss",$agencyName,$agencyDescription,$agencyContactNumber,$agencyAddress,$agencyStatus,$session_agency);
+		mysqli_stmt_bind_param($stmt,"sssssss",$agencyName,$agencyDescription,$agencyContactNumber,$agencyAddress,$agencyStatus,$session_agency,$agencyAvailability);
 
 		mysqli_stmt_execute($stmt);
 

@@ -21,7 +21,8 @@ if($numrows > 0){
 		$agencyContactNumber = $row['AgencyContactNumber'];
 		$agencyAddress = $row['AgencyLocation'];
 		$agencyStatus = $row['AgencyStatus'];
-	}
+    $agencyAvailability = $row['AgencyAvailability'];
+ 	}
 }
 
 ?>
@@ -197,6 +198,13 @@ if($numrows > 0){
 	                        <textarea cols=50 rows=5 class="form-control" name="agency_address" required maxlength="500"><?php echo $agencyAddress; ?></textarea>
 	                      </div>
 	                    </div>
+
+                      <div class="col-md-12">
+                      <div class="form-group">
+                        <label class="bmd-label-floating">Agency Availability</label>
+                        <textarea cols=50 rows=5 class="form-control" name="agency_availability" required maxlength="500"><?php echo $agencyAvailability; ?></textarea>
+                      </div>
+                    </div>
 
 		                  <div class="col-md-12">
 		                    <div class="form-group">

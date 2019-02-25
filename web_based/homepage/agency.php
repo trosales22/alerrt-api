@@ -105,6 +105,13 @@ $agencyCaption = "";
                       </div>
                     </div>
 
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <label class="bmd-label-floating">Agency Availability</label>
+                        <textarea cols=50 rows=5 class="form-control" name="agency_availability" required maxlength="500"></textarea>
+                      </div>
+                    </div>
+
 	                  <div class="col-md-12">
 	                    <div class="form-group">
 	                      <select class="form-control" name="agency_status" required>

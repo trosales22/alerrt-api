@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 10, 2019 at 12:39 PM
+-- Generation Time: Feb 25, 2019 at 02:46 PM
 -- Server version: 10.1.37-MariaDB
 -- PHP Version: 7.3.0
 
@@ -36,20 +36,21 @@ CREATE TABLE `tblagency` (
   `AgencyLocation` varchar(1000) NOT NULL,
   `AgencyStatus` varchar(255) NOT NULL,
   `AgencyImage` varchar(1000) NOT NULL,
-  `AgencyMain` varchar(255) NOT NULL
+  `AgencyMain` varchar(255) NOT NULL,
+  `AgencyAvailability` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `tblagency`
 --
 
-INSERT INTO `tblagency` (`AgencyID`, `AgencyCaption`, `AgencyDescription`, `AgencyContactNumber`, `AgencyLocation`, `AgencyStatus`, `AgencyImage`, `AgencyMain`) VALUES
-(1, 'Bureau of Fire Protection-Manila Chapter', 'Description 1', '421-1918,913-2786,09355062962', '', 'Active', '', ''),
-(2, 'DSWD-Main', 'Description 2', '57435834534', '', 'Active', '', ''),
-(3, 'Manila Water', 'Description 3', '654645645', '', 'Active', '', ''),
-(4, 'NDRRMC-NCR', 'Description 4', '53453453', '', 'Active', '', ''),
-(5, 'DSWD 2', '', '4253453', '', 'Active', '', '2'),
-(6, 'Manila Water (Tondo Manila)', 'SAMPLE', 'SAMPLE', 'SAMPLE ADDRESS', 'Active', '', '3');
+INSERT INTO `tblagency` (`AgencyID`, `AgencyCaption`, `AgencyDescription`, `AgencyContactNumber`, `AgencyLocation`, `AgencyStatus`, `AgencyImage`, `AgencyMain`, `AgencyAvailability`) VALUES
+(1, 'Bureau of Fire Protection-Manila Chapter', 'Bureau of Fire Protection-Manila Chapter Description', '09573475934', 'Bureau of Fire Protection-Manila Chapter Address', 'Active', '', '', '12hrs'),
+(2, 'DSWD-Main', 'Description 2', '57435834534', '', 'Active', '', '', ''),
+(3, 'Manila Water', 'Description 3', '654645645', '', 'Active', '', '', '24hrs'),
+(4, 'NDRRMC-NCR', 'Description 4', '53453453', '', 'Active', '', '', '24hrs'),
+(5, 'DSWD 2', '', '4253453', '', 'Active', '', '2', ''),
+(6, 'Manila Water (Tondo Manila)', 'SAMPLE', 'SAMPLE', 'SAMPLE ADDRESS', 'Active', '', '3', '24hrs');
 
 -- --------------------------------------------------------
 
@@ -91,7 +92,7 @@ CREATE TABLE `tblposts` (
 
 INSERT INTO `tblposts` (`TopicID`, `TopicSeverity`, `TopicTitle`, `TopicImage`, `TopicLocationID`, `TopicLocationName`, `TopicLocationAddress`, `TopicAgencyID`, `TopicStatus`, `TopicPostedBy`, `TopicDateAndTimePosted`) VALUES
 (6, 'Minor', 'NDRRMC REPORT', 'images/posts/56324a7126984782f8bf7e9fb94df35f.jpg', '849VCWC8+QCRR', '37Â°25\'19.2\"N 122Â°05\'02.4\"W', 'Address: \n1600 Amphitheatre Pkwy, Mountain View, CA 94043, USA\n', '4', 'Pending', '9acc07c3f382248122c419bdc7c45fa9', 'February 09, 2019 | 09:16 PM'),
-(7, 'Critical', 'MANILA WATER REPORT', 'images/posts/411991efea734b9c97e5a982448e217c.jpg', 'ChIJpbWakPi5j4ARe6K8tsWb_eg', 'Google Shuttle Stop @ Building 40/43', 'Address: \nMountain View, CA 94043, USA\n', '3', 'Pending', '9acc07c3f382248122c419bdc7c45fa9', 'February 10, 2019 | 05:38 PM');
+(7, 'Critical', 'MANILA WATER REPORT', 'images/posts/411991efea734b9c97e5a982448e217c.jpg', 'ChIJpbWakPi5j4ARe6K8tsWb_eg', 'Google Shuttle Stop @ Building 40/43', 'Address: \nMountain View, CA 94043, USA\n', '3', 'Ongoing', '9acc07c3f382248122c419bdc7c45fa9', 'February 10, 2019 | 05:38 PM');
 
 -- --------------------------------------------------------
 
@@ -106,6 +107,13 @@ CREATE TABLE `tblstatus` (
   `StatusBy` varchar(255) NOT NULL,
   `StatusDateAndTime` varchar(1000) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `tblstatus`
+--
+
+INSERT INTO `tblstatus` (`StatusID`, `StatusPostID`, `StatusType`, `StatusBy`, `StatusDateAndTime`) VALUES
+(1, '7', 'Ongoing', '9acc07c3f382248122c419bdc7c45ga8', 'February 10, 2019 | 10:04 PM');
 
 -- --------------------------------------------------------
 
@@ -202,7 +210,7 @@ ALTER TABLE `tblposts`
 -- AUTO_INCREMENT for table `tblstatus`
 --
 ALTER TABLE `tblstatus`
-  MODIFY `StatusID` int(255) NOT NULL AUTO_INCREMENT;
+  MODIFY `StatusID` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `tblusers`

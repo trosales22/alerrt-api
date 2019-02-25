@@ -12,8 +12,9 @@ function updateAgency(){
 	$agencyContactNumber = $_POST['agency_contact_number'];
 	$agencyAddress = $_POST['agency_address'];
 	$agencyStatus = $_POST['agency_status'];
+	$agencyAvailability = $_POST['agency_availability'];
 
-	$query = "UPDATE tblagency SET AgencyCaption=?,AgencyDescription=?,AgencyContactNumber=?,AgencyLocation=?,AgencyStatus=? WHERE AgencyID=?";
+	$query = "UPDATE tblagency SET AgencyCaption=?,AgencyDescription=?,AgencyContactNumber=?,AgencyLocation=?,AgencyStatus=?,AgencyAvailability=? WHERE AgencyID=?";
 
 	$stmt = mysqli_prepare($con,$query);
 
@@ -21,7 +22,7 @@ function updateAgency(){
 		die(mysqli_error($con));
 	}
 
-	mysqli_stmt_bind_param($stmt,"ssssss",$agencyCaption,$agencyDescription,$agencyContactNumber,$agencyAddress,$agencyStatus,$agencyID);
+	mysqli_stmt_bind_param($stmt,"sssssss",$agencyCaption,$agencyDescription,$agencyContactNumber,$agencyAddress,$agencyStatus,$agencyAvailability,$agencyID);
 
 	mysqli_stmt_execute($stmt);
 
