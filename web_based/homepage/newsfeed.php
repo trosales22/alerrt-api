@@ -210,6 +210,7 @@ $row=mysqli_fetch_array($result);
               ?>
 
               <div id="Critical" class="tabcontent" style="overflow-y: auto; max-height: 600px;">
+              	<strong style="color: red; font-size: 20px;">If severity is <b>Critical</b>, users are expecting to have a quick response. It means as soon as possible.</strong><br><br>
                 <?php 
                 $topicSeverity = 'Critical';
                 showAllPost($topicSeverity);
